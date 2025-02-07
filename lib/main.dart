@@ -84,6 +84,19 @@ Widget buildChartList() {
       
       final charts = snapshot.data!;
       
+      // 차트 리스트가 비어있는 경우 처리
+      if (charts.isEmpty) {
+        return const Center(
+          child: Text(
+            '현재 표시할 차트 이미지가 없습니다.',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        );
+      }
+      
       return ListView.builder(
         itemCount: charts.length,
         itemBuilder: (context, index) {
