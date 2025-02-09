@@ -58,24 +58,15 @@ class TradeCard extends StatelessWidget {
       }
     }
 
-    // decision 값에 따른 이모지를 가져오는 함수
-    String getDecisionEmoji() {
-      switch (trade.decision.toUpperCase()) {
-        case 'BUY':
-          return '🔥 ';
-        case 'SELL':
-          return '✅ ';
-        case 'HOLD':
-          return '⬛️ ';
-        default:
-          return '';
-      }
-    }
 
     return GestureDetector(
       onTap: () => onTap(trade),
       child: Card(
         margin: const EdgeInsets.all(8),
+        color: const Color(0xFFFFFFFF),  // 흰색으로 설정
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(28),  // 모서리 둥글기를 16으로 설정
+        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
@@ -84,19 +75,14 @@ class TradeCard extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 2.0,
-                  ),
                 ),
-                child: ClipOval(
-                  child: Image.asset(
+                child: Image.asset(
                     getDecisionImage(),
                     width: 80,
                     height: 80,
                     fit: BoxFit.cover,
                   ),
-                ),
+                
               ),
               const SizedBox(width: 32),
               
@@ -107,16 +93,17 @@ class TradeCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      '${getDecisionEmoji()}${trade.decision}',
+                      trade.decision,
                       style: const TextStyle(
-                        fontSize: 24, 
-                        fontWeight: FontWeight.bold
+                        fontSize: 21, 
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff313C4B)
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       NumberFormat('#,###').format(trade.price / 1000),
-                      style: const TextStyle(fontSize: 14),
+                      style: const TextStyle(fontSize: 14, color: Color(0xff697584)),
                     ),
                   ],
                 ),
