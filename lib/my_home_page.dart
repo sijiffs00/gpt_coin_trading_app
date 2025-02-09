@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('비트코인 차트'),
+        title: const Text('매매기록'),
         elevation: 8,
         shadowColor: Colors.black38,
         surfaceTintColor: Colors.transparent,

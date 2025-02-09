@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../models/trade.dart';
 
 class TradeCard extends StatelessWidget {
@@ -8,6 +9,28 @@ class TradeCard extends StatelessWidget {
     super.key,
     required this.trade,
   });
+
+  // 날짜 포맷을 처리하는 함수
+  String formatTimestamp(String timestamp) {
+    final DateTime dateTime = DateTime.parse(timestamp);
+    final DateTime now = DateTime.now();
+    final bool isToday = dateTime.year == now.year && 
+                        dateTime.month == now.month && 
+                        dateTime.day == now.day;
+
+    if (isToday) {
+      // 오전/오후를 직접 처리
+      final hour = dateTime.hour;
+      final minute = dateTime.minute.toString().padLeft(2, '0');
+      final period = hour < 12 ? '오전' : '오후';
+      final displayHour = hour <= 12 ? hour : hour - 12;
+      
+      return '$period $displayHour:$minute';
+    } else {
+      // 다른 날짜면 'M/d HH:mm' 형식
+      return DateFormat('M/d HH:mm').format(dateTime);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +45,20 @@ class TradeCard extends StatelessWidget {
           return 'assets/hold_img.JPG';
         default:
           return 'assets/hold_img.JPG';  // 기본값
+      }
+    }
+
+    // decision 값에 따른 이모지를 가져오는 함수
+    String getDecisionEmoji() {
+      switch (trade.decision.toUpperCase()) {
+        case 'BUY':
+          return '🔥 ';
+        case 'SELL':
+          return '🐋 ';
+        case 'HOLD':
+          return '🖐🏻 ';
+        default:
+          return '';
       }
     }
 
@@ -53,7 +90,7 @@ class TradeCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        trade.decision,
+                        '${getDecisionEmoji()}${trade.decision}',  // 이모지와 decision 텍스트 합치기
                         style: const TextStyle(
                           fontSize: 18, 
                           fontWeight: FontWeight.bold
@@ -79,7 +116,7 @@ class TradeCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '⏰ ${trade.timestamp}',
+                    formatTimestamp(trade.timestamp),
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.grey,
