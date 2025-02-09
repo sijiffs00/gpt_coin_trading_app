@@ -19,6 +19,11 @@ class TradeCard extends StatelessWidget {
     final bool isToday = dateTime.year == now.year && 
                         dateTime.month == now.month && 
                         dateTime.day == now.day;
+    
+    // 어제 날짜인지 확인
+    final bool isYesterday = dateTime.year == now.year &&
+                            dateTime.month == now.month &&
+                            dateTime.day == now.day - 1;
 
     if (isToday) {
       // 오전/오후를 직접 처리
@@ -28,8 +33,11 @@ class TradeCard extends StatelessWidget {
       final displayHour = hour <= 12 ? hour : hour - 12;
       
       return '$period $displayHour:$minute';
+    } else if (isYesterday) {
+      // 어제인 경우 '어제 HH:mm' 형식
+      return '어제 ${DateFormat('HH:mm').format(dateTime)}';
     } else {
-      // 다른 날짜면 'M/d HH:mm' 형식
+      // 그 외의 경우 'M/d HH:mm' 형식
       return DateFormat('M/d HH:mm').format(dateTime);
     }
   }
@@ -64,12 +72,12 @@ class TradeCard extends StatelessWidget {
       }
     }
 
-    return GestureDetector(  // Card를 GestureDetector로 감싸기
-      onTap: () => onTap(trade),  // 탭했을 때 콜백 함수 호출
+    return GestureDetector(
+      onTap: () => onTap(trade),
       child: Card(
         margin: const EdgeInsets.all(8),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             children: [
               // 왼쪽: decision에 따른 이미지
@@ -77,8 +85,8 @@ class TradeCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Colors.grey,  // 테두리 색상
-                    width: 2.0,          // 테두리 굵기
+                    color: Colors.grey,
+                    width: 2.0,
                   ),
                 ),
                 child: ClipOval(
@@ -90,15 +98,14 @@ class TradeCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 32),
               
-              // 오른쪽: 거래 정보
+              // 중앙: 거래 정보
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Decision 표시 (차트 이미지 제거)
                     Text(
                       '${getDecisionEmoji()}${trade.decision}',
                       style: const TextStyle(
@@ -108,18 +115,19 @@ class TradeCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      NumberFormat('#,###').format(trade.price / 1000),  // 천 단위 구분 쉼표 추가
+                      NumberFormat('#,###').format(trade.price / 1000),
                       style: const TextStyle(fontSize: 16),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      formatTimestamp(trade.timestamp),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
-                    ),
                   ],
+                ),
+              ),
+
+              // 오른쪽: timestamp
+              Text(
+                formatTimestamp(trade.timestamp),
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey,
                 ),
               ),
             ],
