@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http; // http 패키지 import
 import 'dart:convert'; // JSON 처리를 위한 import
 import 'models/trade.dart';
 import 'widgets/trade_card.dart';  // 새로 추가!
+import 'pages/trade_detail_page.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -64,7 +65,17 @@ class _MyHomePageState extends State<MyHomePage> {
               ? const Center(child: Text('데이터가 없습니다'))
               : ListView.builder(
                   itemCount: trades.length,
-                  itemBuilder: (context, index) => TradeCard(trade: trades[index]),
+                  itemBuilder: (context, index) => TradeCard(
+                    trade: trades[index],
+                    onTap: (trade) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TradeDetailPage(trade: trade),
+                        ),
+                      );
+                    },
+                  ),
                 ),
     );
   }
