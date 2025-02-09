@@ -52,29 +52,45 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('매매기록'),
-        elevation: 8,
-        shadowColor: Colors.black38,
-        surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(80),  // AppBar 높이를 80으로 설정
+        child: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,  // GIF를 중앙에 배치
+            children: [
+              Image.asset(
+                'assets/dance.gif',
+                height: 60,  // GIF 크기를 60으로 키움
+                fit: BoxFit.contain,
+              ),
+            ],
+          ),
+          elevation: 8,
+          shadowColor: Colors.black38,
+          surfaceTintColor: Colors.transparent,
+          backgroundColor: Colors.white,
+          centerTitle: true,  // title을 중앙 정렬
+        ),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : trades.isEmpty
               ? const Center(child: Text('데이터가 없습니다'))
-              : ListView.builder(
-                  itemCount: trades.length,
-                  itemBuilder: (context, index) => TradeCard(
-                    trade: trades[index],
-                    onTap: (trade) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TradeDetailPage(trade: trade),
-                        ),
-                      );
-                    },
+              : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),  // 좌우 여백 24 추가
+                  child: ListView.builder(
+                    itemCount: trades.length,
+                    itemBuilder: (context, index) => TradeCard(
+                      trade: trades[index],
+                      onTap: (trade) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TradeDetailPage(trade: trade),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
     );

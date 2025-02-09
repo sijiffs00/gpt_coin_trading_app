@@ -109,14 +109,14 @@ class TradeCard extends StatelessWidget {
                     Text(
                       '${getDecisionEmoji()}${trade.decision}',
                       style: const TextStyle(
-                        fontSize: 18, 
+                        fontSize: 24, 
                         fontWeight: FontWeight.bold
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       NumberFormat('#,###').format(trade.price / 1000),
-                      style: const TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 14),
                     ),
                   ],
                 ),
