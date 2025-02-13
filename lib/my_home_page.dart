@@ -124,20 +124,23 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         );
       case LoadingStatus.success:
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: ListView.builder(
-            itemCount: trades.length,
-            itemBuilder: (context, index) => TradeCard(
-              trade: trades[index],
-              onTap: (trade) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => TradeDetailPage(trade: trade),
-                  ),
-                );
-              },
+        return RefreshIndicator(
+          onRefresh: fetchTrades,  // 당겨서 새로고침할 때 실행될 함수
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: ListView.builder(
+              itemCount: trades.length,
+              itemBuilder: (context, index) => TradeCard(
+                trade: trades[index],
+                onTap: (trade) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TradeDetailPage(trade: trade),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         );
