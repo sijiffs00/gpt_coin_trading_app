@@ -5,7 +5,6 @@ import 'package:gpt_coin_trading/my_home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'firebase_options.dart';
-import 'package:flutter/foundation.dart';
 
 // 백그라운드 메시지를 처리하는 함수야
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

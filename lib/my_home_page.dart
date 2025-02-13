@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http; // http 패키지 import
+import 'package:http/http.dart' as http; 
 import 'dart:convert'; // JSON 처리를 위한 import
 import 'models/trade.dart';
-import 'widgets/trade_card.dart';  // 새로 추가!
+import 'widgets/trade_card.dart';  
 import 'pages/trade_detail_page.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -12,9 +12,18 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+// LoadingStatus enum 추가
+enum LoadingStatus {
+  loading,
+  success,
+  empty,
+  error
+}
+
 class _MyHomePageState extends State<MyHomePage> {
   List<Trade> trades = [];
-  bool isLoading = false;
+  // isLoading 대신 loadingStatus 사용
+  LoadingStatus loadingStatus = LoadingStatus.loading;
 
   @override
   void initState() {
@@ -24,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> fetchTrades() async {
     setState(() {
-      isLoading = true;
+      loadingStatus = LoadingStatus.loading;
     });
 
     try {
@@ -33,18 +42,21 @@ class _MyHomePageState extends State<MyHomePage> {
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
         if (data['success'] == true) {
+          final tradesList = (data['trades'] as List)
+              .map((trade) => Trade.fromJson(trade))
+              .toList();
+          
           setState(() {
-            trades = (data['trades'] as List)
-                .map((trade) => Trade.fromJson(trade))
-                .toList();
+            trades = tradesList;
+            // 데이터가 있는지 없는지에 따라 상태 설정
+            loadingStatus = tradesList.isEmpty ? LoadingStatus.empty : LoadingStatus.success;
           });
         }
       }
     } catch (e) {
       print('Error fetching trades: $e');
-    } finally {
       setState(() {
-        isLoading = false;
+        loadingStatus = LoadingStatus.error;
       });
     }
   }
@@ -73,27 +85,62 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       backgroundColor: const Color(0xFFF2F4F6),  // 배경색 설정
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : trades.isEmpty
-              ? const Center(child: Text('데이터가 없습니다'))
-              : Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),  // 좌우 여백 24 추가
-                  child: ListView.builder(
-                    itemCount: trades.length,
-                    itemBuilder: (context, index) => TradeCard(
-                      trade: trades[index],
-                      onTap: (trade) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TradeDetailPage(trade: trade),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
+      body: _buildBody(),
     );
+  }
+
+  Widget _buildBody() {
+    switch (loadingStatus) {
+      case LoadingStatus.loading:
+        return const Center(child: CircularProgressIndicator());
+      case LoadingStatus.empty:
+        return const Center(
+          child: Text(
+            '현재 데이터가 없어요',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey,
+            ),
+          ),
+        );
+      case LoadingStatus.error:
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                '서버 꺼져있음',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: fetchTrades,
+                child: const Text('새로고침'),
+              ),
+            ],
+          ),
+        );
+      case LoadingStatus.success:
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: ListView.builder(
+            itemCount: trades.length,
+            itemBuilder: (context, index) => TradeCard(
+              trade: trades[index],
+              onTap: (trade) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TradeDetailPage(trade: trade),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+    }
   }
 }
