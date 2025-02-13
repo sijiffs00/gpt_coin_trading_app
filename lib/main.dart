@@ -5,6 +5,8 @@ import 'package:gpt_coin_trading/my_home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'firebase_options.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 // 백그라운드 메시지를 처리하는 함수야
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -53,6 +55,24 @@ void main() async {
             try {
               final token = await messaging.getToken();
               print('FCM 토큰 획득 성공: $token');
+              
+              // FCM 토큰을 서버로 전송
+              try {
+                final response = await http.post(
+                  Uri.parse('http://15.164.48.123:8000/api/fcm-token'),
+                  headers: {'Content-Type': 'application/json'},
+                  body: jsonEncode({'token': token}),
+                );
+                
+                if (response.statusCode == 200) {
+                  print('FCM 토큰 서버 전송 성공!');
+                } else {
+                  print('FCM 토큰 서버 전송 실패: ${response.statusCode}');
+                }
+              } catch (e) {
+                print('FCM 토큰 서버 전송 중 에러: $e');
+              }
+              
               break;
             } catch (e) {
               print('FCM 토큰 가져오기 실패: $e');
