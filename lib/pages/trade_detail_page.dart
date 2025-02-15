@@ -11,7 +11,10 @@ class TradeDetailPage extends StatelessWidget {
 
   // decision에 따른 타이틀을 반환하는 함수
   String getDecisionTitle() {
-    switch (trade.decision.toUpperCase()) {
+    // null이거나 빈 문자열이면 '❓' 반환
+    if (trade.decision?.isEmpty ?? true) return '❓';
+    
+    switch (trade.decision!.toUpperCase()) {
       case 'BUY':
         return '🔥';
       case 'SELL':
@@ -19,7 +22,7 @@ class TradeDetailPage extends StatelessWidget {
       case 'HOLD':
         return '⬛️';
       default:
-        return trade.decision;
+        return trade.decision!;
     }
   }
 
@@ -38,14 +41,15 @@ class TradeDetailPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // 차트 이미지
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                trade.img,
-                width: double.infinity,
-                fit: BoxFit.cover,
+            if (trade.img != null) 
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  trade.img!,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
             const SizedBox(height: 16),
             // 거래 정보
             Card(
@@ -55,7 +59,7 @@ class TradeDetailPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '매매 결정: ${trade.decision}',
+                      '매매 결정: ${trade.decision ?? '없음'}',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -63,12 +67,12 @@ class TradeDetailPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '가격: ${trade.price}',
+                      '가격: ${trade.price ?? '없음'}',
                       style: const TextStyle(fontSize: 18),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '시간: ${trade.timestamp}',
+                      '시간: ${trade.timestamp ?? '없음'}',
                       style: const TextStyle(fontSize: 16),
                     ),
                     const SizedBox(height: 16),
@@ -82,7 +86,7 @@ class TradeDetailPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      trade.reason,
+                      trade.reason ?? '매매 이유 없음',
                       style: const TextStyle(
                         fontSize: 16,
                         height: 1.5,  // 줄 간격을 조금 넓게

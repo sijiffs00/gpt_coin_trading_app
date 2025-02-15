@@ -46,7 +46,7 @@ class TradeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     // decision 값에 따른 이미지 경로를 가져오는 함수
     String getDecisionImage() {
-      switch (trade.decision.toUpperCase()) {  // 대문자로 변환해서 비교
+      switch (trade.decision?.toUpperCase() ?? 'UNKNOWN') {
         case 'BUY':
           return 'assets/buy_img.JPG';
         case 'SELL':
@@ -54,7 +54,7 @@ class TradeCard extends StatelessWidget {
         case 'HOLD':
           return 'assets/hold_img.JPG';
         default:
-          return 'assets/hold_img.JPG';  // 기본값
+          return 'assets/hold_img.JPG';
       }
     }
 
@@ -93,7 +93,7 @@ class TradeCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      trade.decision,
+                      trade.decision ?? 'UNKNOWN',
                       style: const TextStyle(
                         fontSize: 21, 
                         fontWeight: FontWeight.bold,
@@ -102,7 +102,7 @@ class TradeCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      NumberFormat('#,###').format(trade.price / 1000),
+                      NumberFormat('#,###').format((trade.price ?? 0) / 1000),
                       style: const TextStyle(fontSize: 14, color: Color(0xff697584)),
                     ),
                   ],
@@ -111,7 +111,7 @@ class TradeCard extends StatelessWidget {
 
               // 오른쪽: timestamp
               Text(
-                formatTimestamp(trade.timestamp),
+                formatTimestamp(trade.timestamp ?? ''),
                 style: const TextStyle(
                   fontSize: 14,
                   color: Colors.grey,

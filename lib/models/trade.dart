@@ -1,31 +1,34 @@
 class Trade {
-  final String decision;
-  final int id;
-  final String img;
-  final int percentage;
-  final double price;
-  final String reason;
-  final String timestamp;
+  final int? id;
+  final String? timestamp;
+  final String? img;
+  final double? price;
+  final String? decision;
+  final int? percentage;
+  final String? reason;
+  final String? original_reason;
 
   Trade({
-    required this.decision,
-    required this.id,
-    required this.img,
-    required this.percentage,
-    required this.price,
-    required this.reason,
-    required this.timestamp,
+    this.id,
+    this.timestamp,
+    this.img,
+    this.price,
+    this.decision,
+    this.percentage,
+    this.reason,
+    this.original_reason,
   });
 
   factory Trade.fromJson(Map<String, dynamic> json) {
     return Trade(
-      decision: json['decision'],
-      id: json['id'],
-      img: json['img'],
-      percentage: json['percentage'],
-      price: json['price'],
-      reason: json['reason'],
-      timestamp: json['timestamp'],
+      id: json['id'] as int?,
+      timestamp: json['timestamp'] as String?,
+      img: json['img'] as String?,
+      price: json['price'] != null ? (json['price'] as num).toDouble() : null,
+      decision: json['decision'] as String?,
+      percentage: json['percentage'] as int?,
+      reason: json['reason'] as String?,
+      original_reason: json['original_reason'] as String?,
     );
   }
 } 
