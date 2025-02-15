@@ -92,13 +92,32 @@ class TradeCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      trade.decision ?? 'UNKNOWN',
-                      style: const TextStyle(
-                        fontSize: 21, 
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff313C4B)
-                      ),
+                    // decision과 percentage를 한 줄에
+                    Row(
+                      children: [
+                        Text(
+                          trade.decision ?? 'UNKNOWN',
+                          style: const TextStyle(
+                            fontSize: 21, 
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff313C4B)
+                          ),
+                        ),
+                        const SizedBox(width: 8),  // 간격 추가
+                        // percentage는 BUY/SELL일 때만
+                        if (trade.decision?.toUpperCase() == 'BUY' || 
+                            trade.decision?.toUpperCase() == 'SELL')
+                          Text(
+                            '${trade.percentage}%',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: trade.decision?.toUpperCase() == 'BUY' 
+                                  ? const Color(0xFFFF3B30)  // BUY: 빨간색
+                                  : const Color(0xFF007AFF), // SELL: 파란색
+                            ),
+                          ),
+                      ],
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -109,7 +128,7 @@ class TradeCard extends StatelessWidget {
                 ),
               ),
 
-              // 오른쪽: timestamp
+              // 오른쪽: timestamp만
               Text(
                 formatTimestamp(trade.timestamp ?? ''),
                 style: const TextStyle(
