@@ -4,6 +4,7 @@ import 'dart:convert'; // JSON 처리를 위한 import
 import 'models/trade.dart';
 import 'widgets/trade_card.dart';  
 import 'pages/trade_detail_page.dart';
+import 'package:intl/intl.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -59,6 +60,39 @@ class _MyHomePageState extends State<MyHomePage> {
         loadingStatus = LoadingStatus.error;
       });
     }
+  }
+
+  // 거래 내역을 날짜별로 그룹화하는 함수
+  Map<String, List<Trade>> groupTradesByDate() {
+    final groupedTrades = <String, List<Trade>>{};
+    final now = DateTime.now();
+    
+    for (var trade in trades) {
+      if (trade.timestamp == null) continue;
+      
+      final date = DateTime.parse(trade.timestamp!);
+      String dateStr;
+      
+      // 오늘인지 확인
+      if (date.year == now.year && date.month == now.month && date.day == now.day) {
+        dateStr = '오늘';
+      }
+      // 어제인지 확인
+      else if (date.year == now.year && date.month == now.month && date.day == now.day - 1) {
+        dateStr = '어제';
+      }
+      // 그 외의 날짜
+      else {
+        dateStr = DateFormat('yyyy년 M월 d일').format(date);
+      }
+      
+      if (!groupedTrades.containsKey(dateStr)) {
+        groupedTrades[dateStr] = [];
+      }
+      groupedTrades[dateStr]!.add(trade);
+    }
+    
+    return groupedTrades;
   }
 
   @override
@@ -124,24 +158,46 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         );
       case LoadingStatus.success:
+        final groupedTrades = groupTradesByDate();
+        final dates = groupedTrades.keys.toList()..sort((a, b) => b.compareTo(a));  // 최신 날짜순
+
         return RefreshIndicator(
-          onRefresh: fetchTrades,  // 당겨서 새로고침할 때 실행될 함수
-          child: Padding(
+          onRefresh: fetchTrades,
+          child: ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: ListView.builder(
-              itemCount: trades.length,
-              itemBuilder: (context, index) => TradeCard(
-                trade: trades[index],
-                onTap: (trade) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TradeDetailPage(trade: trade),
+            itemCount: dates.length,
+            itemBuilder: (context, index) {
+              final date = dates[index];
+              final dailyTrades = groupedTrades[date]!;
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+                    child: Text(
+                      date,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF666666),
+                      ),
                     ),
-                  );
-                },
-              ),
-            ),
+                  ),
+                  ...dailyTrades.map((trade) => TradeCard(
+                    trade: trade,
+                    onTap: (trade) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TradeDetailPage(trade: trade),
+                        ),
+                      );
+                    },
+                  )).toList(),
+                ],
+              );
+            },
           ),
         );
     }
