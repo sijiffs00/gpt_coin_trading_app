@@ -59,84 +59,116 @@ class TradeCard extends StatelessWidget {
     }
 
 
-    return GestureDetector(
-      onTap: () => onTap(trade),
-      child: Card(
-        margin: const EdgeInsets.all(8),
-        color: const Color(0xFFFFFFFF),  // 흰색으로 설정
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(28),  // 모서리 둥글기를 16으로 설정
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(28),
+          boxShadow: [
+            // 첫 번째 그림자 - 가장 멀리 퍼지는 연한 그림자
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.05),
+              spreadRadius: 12,
+              blurRadius: 24,
+              offset: const Offset(0, 12),
+            ),
+            // 두 번째 그림자
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.05),
+              spreadRadius: 6,
+              blurRadius: 12,
+              offset: const Offset(0, 6),
+            ),
+            // 세 번째 그림자
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.05),
+              spreadRadius: 3,
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+            // 네 번째 그림자 - 가장 진한 그림자
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.05),
+              spreadRadius: 5,
+              blurRadius: 4,
+              offset: const Offset(0, 1),
+            ),
+          ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
-            children: [
-              // 왼쪽: decision에 따른 이미지
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: Image.asset(
-                    getDecisionImage(),
-                    width: 80,
-                    height: 80,
-                    fit: BoxFit.cover,
+        child: GestureDetector(
+          onTap: () => onTap(trade),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                // 왼쪽: decision에 따른 이미지
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
                   ),
+                  child: Image.asset(
+                      getDecisionImage(),
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                    ),
+                  
+                ),
+                const SizedBox(width: 32),
                 
-              ),
-              const SizedBox(width: 32),
-              
-              // 중앙: 거래 정보
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // decision과 percentage를 한 줄에
-                    Row(
-                      children: [
-                        Text(
-                          trade.decision ?? 'UNKNOWN',
-                          style: const TextStyle(
-                            fontSize: 21, 
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff313C4B)
-                          ),
-                        ),
-                        const SizedBox(width: 8),  // 간격 추가
-                        // percentage는 BUY/SELL일 때만
-                        if (trade.decision?.toUpperCase() == 'BUY' || 
-                            trade.decision?.toUpperCase() == 'SELL')
+                // 중앙: 거래 정보
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // decision과 percentage를 한 줄에
+                      Row(
+                        children: [
                           Text(
-                            '${trade.percentage}%',
-                            style: TextStyle(
-                              fontSize: 16,
+                            trade.decision ?? 'UNKNOWN',
+                            style: const TextStyle(
+                              fontSize: 21, 
                               fontWeight: FontWeight.bold,
-                              color: trade.decision?.toUpperCase() == 'BUY' 
-                                  ? const Color(0xFFFF3B30)  // BUY: 빨간색
-                                  : const Color(0xFF007AFF), // SELL: 파란색
+                              color: Color(0xff313C4B)
                             ),
                           ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      NumberFormat('#,###').format((trade.price ?? 0) / 1000),
-                      style: const TextStyle(fontSize: 14, color: Color(0xff697584)),
-                    ),
-                  ],
+                          const SizedBox(width: 8),  // 간격 추가
+                          // percentage는 BUY/SELL일 때만
+                          if (trade.decision?.toUpperCase() == 'BUY' || 
+                              trade.decision?.toUpperCase() == 'SELL')
+                            Text(
+                              '${trade.percentage}%',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: trade.decision?.toUpperCase() == 'BUY' 
+                                    ? const Color(0xFFFF3B30)  // BUY: 빨간색
+                                    : const Color(0xFF007AFF), // SELL: 파란색
+                              ),
+                              ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        NumberFormat('#,###').format((trade.price ?? 0) / 1000),
+                        style: const TextStyle(fontSize: 14, color: Color(0xff697584)),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
 
-              // 오른쪽: timestamp만
-              Text(
-                formatTimestamp(trade.timestamp ?? ''),
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
+                // 오른쪽: timestamp만
+                Text(
+                  formatTimestamp(trade.timestamp ?? ''),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

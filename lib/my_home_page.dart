@@ -118,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
           centerTitle: true,  // title을 중앙 정렬
         ),
       ),
-      backgroundColor: const Color(0xFFF2F4F6),  // 배경색 설정
+      backgroundColor: Colors.white,     
       body: _buildBody(),
     );
   }
