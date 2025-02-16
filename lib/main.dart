@@ -110,7 +110,69 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(),
+      home: FutureBuilder(
+        future: _initializeApp(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // 초기화 중일 때 보여줄 로딩 화면
+            return const Scaffold(
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(height: 16),
+                    Text('앱을 준비하고 있어요...'),
+                  ],
+                ),
+              ),
+            );
+          }
+          // 초기화가 완료되면 메인 화면으로!
+          return const MyHomePage();
+        },
+      ),
     );
+  }
+}
+
+// 앱 초기화 함수를 따로 만들어줄게
+Future<void> _initializeApp() async {
+  await initializeDateFormatting('ko_KR', null);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  
+  final messaging = FirebaseMessaging.instance;
+  await messaging.requestPermission(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  if (Platform.isIOS) {
+    for (int i = 0; i < 3; i++) {
+      try {
+        final apnsToken = await messaging.getAPNSToken();
+        if (apnsToken != null) {
+          final token = await messaging.getToken();
+          try {
+            await http.post(
+              Uri.parse('http://15.164.48.123:8000/api/fcm-token'),
+              headers: {'Content-Type': 'application/json'},
+              body: jsonEncode({'token': token}),
+            );
+          } catch (e) {
+            print('FCM 토큰 서버 전송 중 에러: $e');
+          }
+          break;
+        }
+      } catch (e) {
+        print('토큰 처리 중 에러: $e');
+      }
+      await Future.delayed(const Duration(seconds: 2));
+    }
   }
 }
