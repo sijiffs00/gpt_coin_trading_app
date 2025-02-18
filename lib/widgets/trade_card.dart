@@ -48,17 +48,17 @@ class TradeCard extends StatelessWidget {
       case 'BUY':
         return {
           'image': 'assets/buy_img.png',
-          'backgroundColor': const Color(0x1A2DC76D),  // 초록색 배경
+          'backgroundColor': const Color(0x332DC76D),  // 초록색 배경
         };
       case 'SELL':
         return {
           'image': 'assets/sell_img.png',
-          'backgroundColor': const Color(0x1A2F61D5),  // 파란색 배경
+          'backgroundColor': const Color(0x33007FFF),  // 파란색 배경
         };
       case 'HOLD':
         return {
           'image': 'assets/hold_img.png',
-          'backgroundColor': const Color(0x1A868697),  // 회색 배경
+          'backgroundColor': const Color(0x33868697),  // 회색 배경
         };
       default:
         return {
@@ -158,7 +158,7 @@ class TradeCard extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 color: trade.decision?.toUpperCase() == 'BUY' 
                                     ? const Color(0xFF2DC76D)  // BUY일 때는 초록색 
-                                    : const Color(0xFF2F61D5), // SELL일 때는 파란색 
+                                    : const Color(0xFF007FFF), // SELL일 때는 파란색 
                               ),
                             ),
                         ],
