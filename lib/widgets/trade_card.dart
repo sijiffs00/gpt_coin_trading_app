@@ -42,25 +42,38 @@ class TradeCard extends StatelessWidget {
     }
   }
 
+  // decision에 따른 스타일 정보를 한번에 관리하는 함수
+  Map<String, dynamic> getDecisionStyle() {
+    switch (trade.decision?.toUpperCase() ?? 'UNKNOWN') {
+      case 'BUY':
+        return {
+          'image': 'assets/buy_img.png',
+          'backgroundColor': const Color(0x1A2DC76D),  // 초록색 배경
+        };
+      case 'SELL':
+        return {
+          'image': 'assets/sell_img.png',
+          'backgroundColor': const Color(0x1A2F61D5),  // 파란색 배경
+        };
+      case 'HOLD':
+        return {
+          'image': 'assets/hold_img.png',
+          'backgroundColor': const Color(0x1A868697),  // 회색 배경
+        };
+      default:
+        return {
+          'image': 'assets/hold_img.png',
+          'backgroundColor': const Color(0xFFF5F5F5),
+        };
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // decision 값에 따른 이미지 경로를 가져오는 함수
-    String getDecisionImage() {
-      switch (trade.decision?.toUpperCase() ?? 'UNKNOWN') {
-        case 'BUY':
-          return 'assets/buy_img.JPG';
-        case 'SELL':
-          return 'assets/sell_img.JPG';
-        case 'HOLD':
-          return 'assets/hold_img.JPG';
-        default:
-          return 'assets/hold_img.JPG';
-      }
-    }
-
+    final decisionStyle = getDecisionStyle();  // 스타일 정보 가져오기
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -105,15 +118,15 @@ class TradeCard extends StatelessWidget {
                 // 왼쪽: decision에 따른 이미지
                 Container(
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle,
+                    color: decisionStyle['backgroundColor'],
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Image.asset(
-                      getDecisionImage(),
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.cover,
-                    ),
-                  
+                    decisionStyle['image'],
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 const SizedBox(width: 32),
                 
@@ -144,10 +157,10 @@ class TradeCard extends StatelessWidget {
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: trade.decision?.toUpperCase() == 'BUY' 
-                                    ? const Color(0xFFFF3B30)  // BUY: 빨간색
-                                    : const Color(0xFF007AFF), // SELL: 파란색
+                                    ? const Color(0xFF2DC76D)  // BUY일 때는 초록색 
+                                    : const Color(0xFF2F61D5), // SELL일 때는 파란색 
                               ),
-                              ),
+                            ),
                         ],
                       ),
                       const SizedBox(height: 8),
