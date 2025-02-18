@@ -23,8 +23,9 @@ enum LoadingStatus {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Trade> trades = [];
-  // isLoading 대신 loadingStatus 사용
   LoadingStatus loadingStatus = LoadingStatus.loading;
+  bool isLoadingMore = false;  // 추가 데이터 로딩 중인지 확인하는 변수
+  DateTime? oldestLoadedDate;  // 가장 오래된 로드된 날짜 저장
 
   @override
   void initState() {
@@ -38,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     try {
-      final response = await http.get(Uri.parse('http://15.164.48.123:8000/api/trades'));
+      final response = await http.get(Uri.parse('http://15.164.48.123:8000/api/trades/recent'));
       
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
@@ -49,7 +50,9 @@ class _MyHomePageState extends State<MyHomePage> {
           
           setState(() {
             trades = tradesList;
-            // 데이터가 있는지 없는지에 따라 상태 설정
+            if (tradesList.isNotEmpty) {
+              oldestLoadedDate = DateTime.parse(tradesList.last.timestamp!);
+            }
             loadingStatus = tradesList.isEmpty ? LoadingStatus.empty : LoadingStatus.success;
           });
         }
@@ -58,6 +61,44 @@ class _MyHomePageState extends State<MyHomePage> {
       print('Error fetching trades: $e');
       setState(() {
         loadingStatus = LoadingStatus.error;
+      });
+    }
+  }
+
+  Future<void> loadMoreTrades() async {
+    if (isLoadingMore || oldestLoadedDate == null) return;
+
+    setState(() {
+      isLoadingMore = true;
+    });
+
+    try {
+      // 이전 날짜의 데이터 요청
+      final previousDate = oldestLoadedDate!.subtract(const Duration(days: 1));
+      final response = await http.get(
+        Uri.parse('http://15.164.48.123:8000/api/trades/by-date?date=${previousDate.toString().split(' ')[0]}')
+      );
+      
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['success'] == true) {
+          final newTrades = (data['trades'] as List)
+              .map((trade) => Trade.fromJson(trade))
+              .toList();
+          
+          setState(() {
+            trades.addAll(newTrades);
+            if (newTrades.isNotEmpty) {
+              oldestLoadedDate = previousDate;
+            }
+          });
+        }
+      }
+    } catch (e) {
+      print('Error loading more trades: $e');
+    } finally {
+      setState(() {
+        isLoadingMore = false;
       });
     }
   }
@@ -159,45 +200,71 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       case LoadingStatus.success:
         final groupedTrades = groupTradesByDate();
-        final dates = groupedTrades.keys.toList()..sort((a, b) => b.compareTo(a));  // 최신 날짜순
+        final dates = groupedTrades.keys.toList()..sort((a, b) => b.compareTo(a));
 
         return RefreshIndicator(
           onRefresh: fetchTrades,
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            itemCount: dates.length,
-            itemBuilder: (context, index) {
-              final date = dates[index];
-              final dailyTrades = groupedTrades[date]!;
-
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
-                    child: Text(
-                      date,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF666666),
-                      ),
-                    ),
-                  ),
-                  ...dailyTrades.map((trade) => TradeCard(
-                    trade: trade,
-                    onTap: (trade) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TradeDetailPage(trade: trade),
-                        ),
-                      );
-                    },
-                  )).toList(),
-                ],
-              );
+          child: NotificationListener<ScrollNotification>(  // 스크롤 감지를 위해 추가
+            onNotification: (ScrollNotification scrollInfo) {
+              if (scrollInfo is ScrollEndNotification) {
+                // 스크롤이 맨 아래에 도달했는지 확인
+                if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
+                  loadMoreTrades();
+                }
+              }
+              return true;
             },
+            child: Scrollbar(
+              thickness: 6.0,
+              radius: const Radius.circular(3.0),
+              thumbVisibility: true,
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                itemCount: dates.length + (isLoadingMore ? 1 : 0),  // 로딩 중일 때 아이템 하나 추가
+                itemBuilder: (context, index) {
+                  // 마지막 아이템이고 로딩 중이면 로딩 표시
+                  if (index == dates.length && isLoadingMore) {
+                    return const Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
+
+                  final date = dates[index];
+                  final dailyTrades = groupedTrades[date]!;
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+                        child: Text(
+                          date,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF666666),
+                          ),
+                        ),
+                      ),
+                      ...dailyTrades.map((trade) => TradeCard(
+                        trade: trade,
+                        onTap: (trade) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TradeDetailPage(trade: trade),
+                            ),
+                          );
+                        },
+                      )).toList(),
+                    ],
+                  );
+                },
+              ),
+            ),
           ),
         );
     }
