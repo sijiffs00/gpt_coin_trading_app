@@ -1,40 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http; 
-import 'dart:convert'; // JSON 처리를 위한 import
-import 'models/trade.dart';
-import 'widgets/trade_card.dart';  
-import 'pages/trade_detail_page.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../models/trade.dart';
+import '../widgets/trade_card.dart';
+import '../pages/trade_detail_page.dart';
 import 'package:intl/intl.dart';
-import 'pages/trades_page.dart';
-import 'pages/graph_page.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class TradesPage extends StatefulWidget {
+  const TradesPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<TradesPage> createState() => _TradesPageState();
 }
 
-// LoadingStatus enum 추가
-enum LoadingStatus {
-  loading,
-  success,
-  empty,
-  error
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _TradesPageState extends State<TradesPage> {
   List<Trade> trades = [];
   LoadingStatus loadingStatus = LoadingStatus.loading;
-  bool isLoadingMore = false;  // 추가 데이터 로딩 중인지 확인하는 변수
-  DateTime? oldestLoadedDate;  // 가장 오래된 로드된 날짜 저장
-  int _selectedIndex = 0;  // 현재 선택된 탭 인덱스
-  
-  // 페이지 목록
-  final List<Widget> _pages = [
-    const TradesPage(),
-    const GraphPage(),
-  ];
+  bool isLoadingMore = false;
+  DateTime? oldestLoadedDate;
 
   @override
   void initState() {
@@ -82,7 +65,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     try {
-      // 이전 날짜의 데이터 요청
       final previousDate = oldestLoadedDate!.subtract(const Duration(days: 1));
       final response = await http.get(
         Uri.parse('http://15.164.48.123:8000/api/trades/by-date?date=${previousDate.toString().split(' ')[0]}')
@@ -112,7 +94,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  // 거래 내역을 날짜별로 그룹화하는 함수
   Map<String, List<Trade>> groupTradesByDate() {
     final groupedTrades = <String, List<Trade>>{};
     final now = DateTime.now();
@@ -123,16 +104,11 @@ class _MyHomePageState extends State<MyHomePage> {
       final date = DateTime.parse(trade.timestamp!);
       String dateStr;
       
-      // 오늘인지 확인
       if (date.year == now.year && date.month == now.month && date.day == now.day) {
         dateStr = '오늘';
-      }
-      // 어제인지 확인
-      else if (date.year == now.year && date.month == now.month && date.day == now.day - 1) {
+      } else if (date.year == now.year && date.month == now.month && date.day == now.day - 1) {
         dateStr = '어제';
-      }
-      // 그 외의 날짜
-      else {
+      } else {
         dateStr = DateFormat('yyyy년 M월 d일').format(date);
       }
       
@@ -148,48 +124,94 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80),
-        child: AppBar(
-          title: Row(
+      backgroundColor: Colors.white,     
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    switch (loadingStatus) {
+      case LoadingStatus.loading:
+        return const Center(child: CircularProgressIndicator());
+      case LoadingStatus.empty:
+        return const Center(child: Text('현재 데이터가 없어요'));
+      case LoadingStatus.error:
+        return Center(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                'assets/dance.gif',
-                height: 60,
-                fit: BoxFit.contain,
+              const Text('서버 꺼져있음'),
+              ElevatedButton(
+                onPressed: fetchTrades,
+                child: const Text('새로고침'),
               ),
             ],
           ),
-          elevation: 8,
-          shadowColor: Colors.black38,
-          surfaceTintColor: Colors.transparent,
-          backgroundColor: Colors.white,
-          centerTitle: true,
+        );
+      case LoadingStatus.success:
+        final groupedTrades = groupTradesByDate();
+        final dates = groupedTrades.keys.toList()..sort((a, b) => b.compareTo(a));
+
+        return RefreshIndicator(
+          onRefresh: fetchTrades,
+          child: NotificationListener<ScrollNotification>(
+            onNotification: (scrollInfo) {
+              if (scrollInfo is ScrollEndNotification &&
+                  scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
+                loadMoreTrades();
+              }
+              return true;
+            },
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              itemCount: dates.length + (isLoadingMore ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index == dates.length && isLoadingMore) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                final date = dates[index];
+                final dailyTrades = groupedTrades[date]!;
+                return _buildDateSection(date, dailyTrades);
+              },
+            ),
+          ),
+        );
+    }
+  }
+
+  Widget _buildDateSection(String date, List<Trade> trades) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+          child: Text(
+            date,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF666666),
+            ),
+          ),
         ),
-      ),
-      body: _pages[_selectedIndex],  // 선택된 페이지 표시
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.article_outlined),
-            activeIcon: Icon(Icons.article),
-            label: '매매기록',
+        ...trades.map((trade) => TradeCard(
+          trade: trade,
+          onTap: (trade) => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TradeDetailPage(trade: trade),
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.show_chart_outlined),
-            activeIcon: Icon(Icons.show_chart),
-            label: '그래프',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.deepPurple,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-      ),
+        )),
+      ],
     );
   }
 }
+
+enum LoadingStatus {
+  loading,
+  success,
+  empty,
+  error
+} 
