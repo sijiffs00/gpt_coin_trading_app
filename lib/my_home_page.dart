@@ -26,20 +26,15 @@ enum LoadingStatus {
 class _MyHomePageState extends State<MyHomePage> {
   List<Trade> trades = [];
   LoadingStatus loadingStatus = LoadingStatus.loading;
-  bool isLoadingMore = false;  // 추가 데이터 로딩 중인지 확인하는 변수
-  DateTime? oldestLoadedDate;  // 가장 오래된 로드된 날짜 저장
-  int _selectedIndex = 0;  // 현재 선택된 탭 인덱스
+  int _selectedIndex = 0;
   
-  // 페이지 목록
-  final List<Widget> _pages = [
-    const TradesPage(),
-    const GraphPage(),
-  ];
+  // GraphPage에 trades 데이터를 전달하도록 수정
+  final List<Widget> _pages = [];  // 초기화를 build에서 할거야
 
   @override
   void initState() {
     super.initState();
-    fetchTrades();
+    fetchTrades();  // 그래프용 데이터를 가져오기
   }
 
   Future<void> fetchTrades() async {
@@ -48,7 +43,8 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     try {
-      final response = await http.get(Uri.parse('http://15.164.48.123:8000/api/trades/recent'));
+      // 새로운 API 엔드포인트로 변경
+      final response = await http.get(Uri.parse('http://15.164.48.123:8000/api/trades'));
       
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
@@ -59,9 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
           
           setState(() {
             trades = tradesList;
-            if (tradesList.isNotEmpty) {
-              oldestLoadedDate = DateTime.parse(tradesList.last.timestamp!);
-            }
             loadingStatus = tradesList.isEmpty ? LoadingStatus.empty : LoadingStatus.success;
           });
         }
@@ -70,44 +63,6 @@ class _MyHomePageState extends State<MyHomePage> {
       print('Error fetching trades: $e');
       setState(() {
         loadingStatus = LoadingStatus.error;
-      });
-    }
-  }
-
-  Future<void> loadMoreTrades() async {
-    if (isLoadingMore || oldestLoadedDate == null) return;
-
-    setState(() {
-      isLoadingMore = true;
-    });
-
-    try {
-      // 이전 날짜의 데이터 요청
-      final previousDate = oldestLoadedDate!.subtract(const Duration(days: 1));
-      final response = await http.get(
-        Uri.parse('http://15.164.48.123:8000/api/trades/by-date?date=${previousDate.toString().split(' ')[0]}')
-      );
-      
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        if (data['success'] == true) {
-          final newTrades = (data['trades'] as List)
-              .map((trade) => Trade.fromJson(trade))
-              .toList();
-          
-          setState(() {
-            trades.addAll(newTrades);
-            if (newTrades.isNotEmpty) {
-              oldestLoadedDate = previousDate;
-            }
-          });
-        }
-      }
-    } catch (e) {
-      print('Error loading more trades: $e');
-    } finally {
-      setState(() {
-        isLoadingMore = false;
       });
     }
   }
@@ -147,6 +102,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // 여기서 _pages를 초기화해서 trades 데이터를 전달
+    _pages.clear();  // 기존 항목들 제거
+    _pages.addAll([
+      const TradesPage(),  // TradesPage는 자체적으로 데이터를 가져오니까 그대로 둬
+      GraphPage(trades: trades),  // GraphPage에 trades 데이터 전달
+    ]);
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),

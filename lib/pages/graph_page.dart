@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import '../models/trade.dart';
 
 class GraphPage extends StatelessWidget {
-  const GraphPage({super.key});
+  final List<Trade> trades;
+  
+  const GraphPage({
+    super.key,
+    required this.trades,
+  });
 
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: Text(
-        '여기에 그래프가 들어갈 거예요!',
-        style: TextStyle(fontSize: 20),
-      ),
+      child: Text('그래프 페이지'),  // 나중에 실제 그래프 구현
     );
   }
 } 
