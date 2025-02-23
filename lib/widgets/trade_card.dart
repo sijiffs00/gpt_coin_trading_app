@@ -138,17 +138,19 @@ class TradeCard extends StatelessWidget {
                     children: [
                       // decision과 percentage를 한 줄에
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
                         children: [
                           Text(
                             trade.decision ?? 'UNKNOWN',
                             style: const TextStyle(
                               fontSize: 21, 
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff313C4B)
+                              fontWeight: FontWeight.w900,
+                              color: Color.fromARGB(255, 95, 89, 112),
+                              fontFamily: 'Tenada'
                             ),
                           ),
-                          const SizedBox(width: 8),  // 간격 추가
-                          // percentage는 BUY/SELL일 때만
+                          const SizedBox(width: 8),
                           if (trade.decision?.toUpperCase() == 'BUY' || 
                               trade.decision?.toUpperCase() == 'SELL')
                             Text(
@@ -159,6 +161,7 @@ class TradeCard extends StatelessWidget {
                                 color: trade.decision?.toUpperCase() == 'BUY' 
                                     ? const Color(0xFF2DC76D)  // BUY일 때는 초록색 
                                     : const Color(0xFF007FFF), // SELL일 때는 파란색 
+                                fontFamily: 'GowunDodum'
                               ),
                             ),
                         ],

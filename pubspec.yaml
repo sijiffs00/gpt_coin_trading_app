@@ -98,6 +98,9 @@ flutter:
     - family: Tenada
       fonts:
         - asset: assets/fonts/Tenada.ttf
+    - family: GowunDodum
+      fonts:
+        - asset: assets/fonts/GowunDodum-Regular.ttf
 
 flutter_launcher_icons:
   android: "launcher_icon"
