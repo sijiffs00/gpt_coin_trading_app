@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../models/trade.dart';
 
-class GraphPage extends StatelessWidget {
+// StatelessWidget에서 StatefulWidget으로 변경
+class GraphPage extends StatefulWidget {
   final List<Trade> trades;
   
   const GraphPage({
@@ -11,72 +12,126 @@ class GraphPage extends StatelessWidget {
   });
 
   @override
+  State<GraphPage> createState() => _GraphPageState();
+}
+
+class _GraphPageState extends State<GraphPage> with SingleTickerProviderStateMixin {
+  // 애니메이션 상태를 관리할 변수들
+  double startDegreeOffset = 0;
+  late AnimationController _controller;
+  late Animation<double> _radiusAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    // 애니메이션 컨트롤러 시간 단축
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    // 반지름 애니메이션 설정
+    _radiusAnimation = Tween<double>(
+      begin: 0,
+      end: 150,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.elasticOut,  // 이 효과는 유지
+    ));
+
+    // 딜레이 없이 바로 시작
+    setState(() {
+      startDegreeOffset = 270;
+    });
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // decision별 건수를 계산
-    final buyCount = trades.where((trade) => trade.decision == 'buy').length;
-    final sellCount = trades.where((trade) => trade.decision == 'sell').length;
-    final holdCount = trades.where((trade) => trade.decision == 'hold').length;
-    final total = trades.length;
+    final buyCount = widget.trades.where((trade) => trade.decision == 'buy').length;
+    final sellCount = widget.trades.where((trade) => trade.decision == 'sell').length;
+    final holdCount = widget.trades.where((trade) => trade.decision == 'hold').length;
+    final total = widget.trades.length;
 
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Total : ${trades.length}건',
+            'Total : ${widget.trades.length}건',
             style: const TextStyle(fontSize: 20),
           ),
           const SizedBox(height: 10),
 
           // 파이차트를 더 크게 만들기
           SizedBox(
-            height: 400,  // 높이를 300에서 400으로 증가
-            width: 400,   // 너비도 지정
-            child: Stack(  // Stack을 사용해서 차트와 텍스트를 겹치게 배치
+            height: 400,
+            width: 400,
+            child: Stack(
               children: [
-                PieChart(
-                  PieChartData(
-                    sections: [
-                      PieChartSectionData(
-                        value: buyCount.toDouble(),
-                        title: 'buy\n${(buyCount / total * 100).toStringAsFixed(1)}%',  // 텍스트 추가
-                        color: const Color(0xFF2DC76D),  // buy 색상
-                        radius: 150,  // 반지름을 100에서 150으로 증가
-                        titleStyle: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,  // 글자 크기 증가
-                          fontWeight: FontWeight.bold,
+                AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, child) {
+                    return PieChart(
+                      PieChartData(
+                        sections: [
+                          PieChartSectionData(
+                            value: buyCount.toDouble(),
+                            title: 'buy\n${(buyCount / total * 100).toStringAsFixed(1)}%',
+                            color: const Color(0xFF2DC76D),
+                            radius: _radiusAnimation.value,  // 애니메이션되는 반지름 사용
+                            titleStyle: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            titlePositionPercentageOffset: 0.5,
+                          ),
+                          PieChartSectionData(
+                            value: sellCount.toDouble(),
+                            title: 'sell\n${(sellCount / total * 100).toStringAsFixed(1)}%',
+                            color: const Color(0xFF007FFF),
+                            radius: _radiusAnimation.value,  // 애니메이션되는 반지름 사용
+                            titleStyle: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            titlePositionPercentageOffset: 0.5,
+                          ),
+                          PieChartSectionData(
+                            value: holdCount.toDouble(),
+                            title: 'hold\n${(holdCount / total * 100).toStringAsFixed(1)}%',
+                            color: const Color(0xFF868697),
+                            radius: _radiusAnimation.value,  // 애니메이션되는 반지름 사용
+                            titleStyle: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            titlePositionPercentageOffset: 0.5,
+                          ),
+                        ],
+                        sectionsSpace: 2,
+                        centerSpaceRadius: 0,
+                        startDegreeOffset: startDegreeOffset,
+                        pieTouchData: PieTouchData(
+                          touchCallback: (_, __) {},
+                          enabled: true,
                         ),
-                        titlePositionPercentageOffset: 0.5,  // 텍스트 위치 조정
                       ),
-                      PieChartSectionData(
-                        value: sellCount.toDouble(),
-                        title: 'sell\n${(sellCount / total * 100).toStringAsFixed(1)}%',  // 텍스트 추가
-                        color: const Color(0xFF007FFF),  // sell 색상
-                        radius: 150,
-                        titleStyle: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        titlePositionPercentageOffset: 0.5,
-                      ),
-                      PieChartSectionData(
-                        value: holdCount.toDouble(),
-                        title: 'hold\n${(holdCount / total * 100).toStringAsFixed(1)}%',  // 텍스트 추가
-                        color: const Color(0xFF868697),  // hold 색상
-                        radius: 150,
-                        titleStyle: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        titlePositionPercentageOffset: 0.5,
-                      ),
-                    ],
-                    sectionsSpace: 2,
-                    centerSpaceRadius: 0,
-                  ),
+                      swapAnimationDuration: const Duration(milliseconds: 800),  // 1500 -> 800으로 단축
+                      swapAnimationCurve: Curves.easeOutQuad,  // 더 부드러운 효과로 변경
+                    );
+                  },
                 ),
               ],
             ),
