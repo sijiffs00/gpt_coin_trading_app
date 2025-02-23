@@ -61,94 +61,97 @@ class _GraphPageState extends State<GraphPage> with SingleTickerProviderStateMix
     final holdCount = widget.trades.where((trade) => trade.decision == 'hold').length;
     final total = widget.trades.length;
 
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Total : ${widget.trades.length}건',
-            style: const TextStyle(fontSize: 20),
-          ),
-          const SizedBox(height: 10),
+    return Container(  // Center를 Container로 감싸기
+      color: const Color(0xFFF8F9FD),  // 매매기록 탭과 동일한 배경색 적용
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Total : ${widget.trades.length}건',
+              style: const TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 10),
 
-          // 파이차트를 더 크게 만들기
-          SizedBox(
-            height: 400,
-            width: 400,
-            child: Stack(
-              children: [
-                AnimatedBuilder(
-                  animation: _controller,
-                  builder: (context, child) {
-                    return PieChart(
-                      PieChartData(
-                        sections: [
-                          PieChartSectionData(
-                            value: buyCount.toDouble(),
-                            title: 'buy\n${(buyCount / total * 100).toStringAsFixed(1)}%',
-                            color: const Color(0xFF2DC76D),
-                            radius: _radiusAnimation.value,  // 애니메이션되는 반지름 사용
-                            titleStyle: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+            // 파이차트를 더 크게 만들기
+            SizedBox(
+              height: 400,
+              width: 400,
+              child: Stack(
+                children: [
+                  AnimatedBuilder(
+                    animation: _controller,
+                    builder: (context, child) {
+                      return PieChart(
+                        PieChartData(
+                          sections: [
+                            PieChartSectionData(
+                              value: buyCount.toDouble(),
+                              title: 'buy\n${(buyCount / total * 100).toStringAsFixed(1)}%',
+                              color: const Color(0xFF2DC76D),
+                              radius: _radiusAnimation.value,  // 애니메이션되는 반지름 사용
+                              titleStyle: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              titlePositionPercentageOffset: 0.5,
                             ),
-                            titlePositionPercentageOffset: 0.5,
-                          ),
-                          PieChartSectionData(
-                            value: sellCount.toDouble(),
-                            title: 'sell\n${(sellCount / total * 100).toStringAsFixed(1)}%',
-                            color: const Color(0xFF007FFF),
-                            radius: _radiusAnimation.value,  // 애니메이션되는 반지름 사용
-                            titleStyle: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                            PieChartSectionData(
+                              value: sellCount.toDouble(),
+                              title: 'sell\n${(sellCount / total * 100).toStringAsFixed(1)}%',
+                              color: const Color(0xFF007FFF),
+                              radius: _radiusAnimation.value,  // 애니메이션되는 반지름 사용
+                              titleStyle: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              titlePositionPercentageOffset: 0.5,
                             ),
-                            titlePositionPercentageOffset: 0.5,
-                          ),
-                          PieChartSectionData(
-                            value: holdCount.toDouble(),
-                            title: 'hold\n${(holdCount / total * 100).toStringAsFixed(1)}%',
-                            color: const Color(0xFF868697),
-                            radius: _radiusAnimation.value,  // 애니메이션되는 반지름 사용
-                            titleStyle: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                            PieChartSectionData(
+                              value: holdCount.toDouble(),
+                              title: 'hold\n${(holdCount / total * 100).toStringAsFixed(1)}%',
+                              color: const Color(0xFF868697),
+                              radius: _radiusAnimation.value,  // 애니메이션되는 반지름 사용
+                              titleStyle: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              titlePositionPercentageOffset: 0.5,
                             ),
-                            titlePositionPercentageOffset: 0.5,
+                          ],
+                          sectionsSpace: 2,
+                          centerSpaceRadius: 0,
+                          startDegreeOffset: startDegreeOffset,
+                          pieTouchData: PieTouchData(
+                            touchCallback: (_, __) {},
+                            enabled: true,
                           ),
-                        ],
-                        sectionsSpace: 2,
-                        centerSpaceRadius: 0,
-                        startDegreeOffset: startDegreeOffset,
-                        pieTouchData: PieTouchData(
-                          touchCallback: (_, __) {},
-                          enabled: true,
                         ),
-                      ),
-                      swapAnimationDuration: const Duration(milliseconds: 800),  // 1500 -> 800으로 단축
-                      swapAnimationCurve: Curves.easeOutQuad,  // 더 부드러운 효과로 변경
-                    );
-                  },
-                ),
+                        swapAnimationDuration: const Duration(milliseconds: 800),  // 1500 -> 800으로 단축
+                        swapAnimationCurve: Curves.easeOutQuad,  // 더 부드러운 효과로 변경
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            // 범례 추가
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildLegendItem('buy', const Color(0xFF2DC76D), '$buyCount건'),
+                const SizedBox(height: 10),  // width를 height로 변경
+                _buildLegendItem('sell', const Color(0xFF007FFF), '$sellCount건'),
+                const SizedBox(height: 10),  // width를 height로 변경
+                _buildLegendItem('hold', const Color(0xFF868697), '$holdCount건'),
               ],
             ),
-          ),
-          const SizedBox(height: 20),
-          // 범례 추가
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildLegendItem('buy', const Color(0xFF2DC76D), '$buyCount건'),
-              const SizedBox(height: 10),  // width를 height로 변경
-              _buildLegendItem('sell', const Color(0xFF007FFF), '$sellCount건'),
-              const SizedBox(height: 10),  // width를 height로 변경
-              _buildLegendItem('hold', const Color(0xFF868697), '$holdCount건'),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

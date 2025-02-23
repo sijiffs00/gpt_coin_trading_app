@@ -146,7 +146,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.deepPurple,
+        selectedItemColor: const Color(0xFF007FFF),  // 선택된 아이템 색상
+        unselectedItemColor: const Color(0xFF868697),  // 선택되지 않은 아이템 색상
+        backgroundColor: Colors.white,  // 배경색
+        elevation: 8,  // 그림자 효과
+        type: BottomNavigationBarType.fixed,  // 고정 스타일
         onTap: (index) {
           setState(() {
             _selectedIndex = index;

@@ -65,7 +65,8 @@ class MyApp extends StatelessWidget {
                     Text(
                       '가보자고',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontFamily: 'Tenada',
+                        fontSize: 30,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
