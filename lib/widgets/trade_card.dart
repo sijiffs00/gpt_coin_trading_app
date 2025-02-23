@@ -145,9 +145,9 @@ class TradeCard extends StatelessWidget {
                             trade.decision ?? 'UNKNOWN',
                             style: const TextStyle(
                               fontSize: 21, 
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w800,
                               color: Color.fromARGB(255, 95, 89, 112),
-                              fontFamily: 'Tenada'
+                              fontFamily: 'LINESeedKR'
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -161,7 +161,6 @@ class TradeCard extends StatelessWidget {
                                 color: trade.decision?.toUpperCase() == 'BUY' 
                                     ? const Color(0xFF2DC76D)  // BUY일 때는 초록색 
                                     : const Color(0xFF007FFF), // SELL일 때는 파란색 
-                                fontFamily: 'GowunDodum'
                               ),
                             ),
                         ],

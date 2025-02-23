@@ -67,14 +67,30 @@ class _GraphPageState extends State<GraphPage> with SingleTickerProviderStateMix
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Total : ${widget.trades.length}건',
-              style: const TextStyle(fontSize: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Total  : ',
+                  style: const TextStyle(fontSize: 20),
+                ),
+                Text(
+                  widget.trades.length.toString(),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'LINESeedKR',
+                    ),
+                ),  
+                Text(
+                  ' 건',
+                  style: const TextStyle(fontSize: 20),
+                ),                              
+              ],
             ),
             const SizedBox(height: 10),
 
-            // 파이차트를 더 크게 만들기
-            SizedBox(
+            Container(
               height: 400,
               width: 400,
               child: Stack(

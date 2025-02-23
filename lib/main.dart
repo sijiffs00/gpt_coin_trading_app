@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        fontFamily: 'LINESeedKR',  // 앱 전체 기본 폰트로 설정
       ),
       home: FutureBuilder(
         future: _initializeApp(),
