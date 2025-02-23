@@ -5,6 +5,7 @@ import '../models/trade.dart';
 import '../widgets/trade_card.dart';
 import '../pages/trade_detail_page.dart';
 import 'package:intl/intl.dart';
+import '../main.dart';  // serverUrl 사용을 위한 import
 
 class TradesPage extends StatefulWidget {
   const TradesPage({super.key});
@@ -31,7 +32,7 @@ class _TradesPageState extends State<TradesPage> {
     });
 
     try {
-      final response = await http.get(Uri.parse('http://15.164.48.123:8000/api/trades/recent'));
+      final response = await http.get(Uri.parse('$serverUrl/api/trades/recent'));
       
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
@@ -67,7 +68,7 @@ class _TradesPageState extends State<TradesPage> {
     try {
       final previousDate = oldestLoadedDate!.subtract(const Duration(days: 1));
       final response = await http.get(
-        Uri.parse('http://15.164.48.123:8000/api/trades/by-date?date=${previousDate.toString().split(' ')[0]}')
+        Uri.parse('$serverUrl/api/trades/by-date?date=${previousDate.toString().split(' ')[0]}')
       );
       
       if (response.statusCode == 200) {

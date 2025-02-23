@@ -8,6 +8,10 @@ import 'firebase_options.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+// 서버 주소 설정
+const String serverUrl = 'http://172.30.1.20:8000';  // 맥북 로컬 
+// const String serverUrl = 'http://15.164.48.123:8000';  // EC2
+
 // 백그라운드 메시지를 처리하는 함수야
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -102,7 +106,7 @@ Future<void> _initializeApp() async {
           final token = await messaging.getToken();
           try {
             await http.post(
-              Uri.parse('http://15.164.48.123:8000/api/fcm-token'),
+              Uri.parse('$serverUrl/api/fcm-token'),
               headers: {'Content-Type': 'application/json'},
               body: jsonEncode({'token': token}),
             );

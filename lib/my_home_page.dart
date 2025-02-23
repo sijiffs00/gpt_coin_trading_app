@@ -7,6 +7,7 @@ import 'pages/trade_detail_page.dart';
 import 'package:intl/intl.dart';
 import 'pages/trades_page.dart';
 import 'pages/graph_page.dart';
+import 'main.dart';  // serverUrl 사용을 위한 import
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -44,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     try {
       // 새로운 API 엔드포인트로 변경
-      final response = await http.get(Uri.parse('http://15.164.48.123:8000/api/trades'));
+      final response = await http.get(Uri.parse('$serverUrl/api/trades'));
       
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
