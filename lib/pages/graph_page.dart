@@ -88,11 +88,25 @@ class _GraphPageState extends State<GraphPage> with SingleTickerProviderStateMix
                 ),                              
               ],
             ),
-            const SizedBox(height: 10),
+
+            SizedBox(height: 32),
+
+            // 범례 추가
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildLegendItem('buy', const Color(0xFF2DC76D), '$buyCount건'),
+                const SizedBox(height: 10),  // width를 height로 변경
+                _buildLegendItem('sell', const Color(0xFF007FFF), '$sellCount건'),
+                const SizedBox(height: 10),  // width를 height로 변경
+                _buildLegendItem('hold', const Color(0xFF868697), '$holdCount건'),
+              ],
+            ),            
+            
 
             Container(
               height: 400,
-              width: 400,
+              width: MediaQuery.of(context).size.width,
               child: Stack(
                 children: [
                   AnimatedBuilder(
@@ -154,18 +168,8 @@ class _GraphPageState extends State<GraphPage> with SingleTickerProviderStateMix
                 ],
               ),
             ),
-            const SizedBox(height: 20),
-            // 범례 추가
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildLegendItem('buy', const Color(0xFF2DC76D), '$buyCount건'),
-                const SizedBox(height: 10),  // width를 height로 변경
-                _buildLegendItem('sell', const Color(0xFF007FFF), '$sellCount건'),
-                const SizedBox(height: 10),  // width를 height로 변경
-                _buildLegendItem('hold', const Color(0xFF868697), '$holdCount건'),
-              ],
-            ),
+            
+
           ],
         ),
       ),

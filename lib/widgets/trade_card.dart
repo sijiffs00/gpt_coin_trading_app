@@ -112,7 +112,7 @@ class TradeCard extends StatelessWidget {
         child: GestureDetector(
           onTap: () => onTap(trade),
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(16, 16, 24, 16),
             child: Row(
               children: [
                 // 왼쪽: decision에 따른 이미지
