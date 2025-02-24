@@ -6,44 +6,38 @@ class UpbitService {
 
   static Future<List<List<num>>> getBitcoinPrices() async {
     try {
-      print('업비트 BTC가격정보 API 호출 시작 ...');
+      // 시작 날짜 설정 (2024년 10월 1일)
+      final startDate = DateTime(2024, 10, 1);
+      final now = DateTime.now();
       
-      final response = await http.get(
-        Uri.parse(
-          '$baseUrl/candles/days'
-          '?market=KRW-BTC'
-          '&count=150'
-          '&fields=candle_date_time_utc,trade_price'
-        ),
+      // 시작 시간과 현재 시간을 Unix timestamp(초 단위)로 변환
+      final to = now.millisecondsSinceEpoch ~/ 1000;
+      final from = startDate.millisecondsSinceEpoch ~/ 1000;
+
+      final url = Uri.parse(
+        'https://api.upbit.com/v1/candles/days'
+        '?market=KRW-BTC'
+        '&count=200'  // 최대 데이터 개수
+        '&to=${to}'
+        '&from=${from}'
       );
 
-      print('상태코드 : ${response.statusCode}');
-      
+      final response = await http.get(url);
       if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+        final List<dynamic> data = jsonDecode(response.body);
         
-        // 데이터의 시작일과 종료일 계산
-        final firstDate = DateTime.parse(data.last['candle_date_time_utc']);
-        final lastDate = DateTime.parse(data.first['candle_date_time_utc']);
-        final period = '${firstDate.year}.${firstDate.month}.${firstDate.day} ~ ${lastDate.year}.${lastDate.month}.${lastDate.day}';
-        
-        print('기간 : $period');
-        print('데이터 갯수 : ${data.length}');
-        print('성공여부 : ${response.statusCode == 200 ? "성공" : "실패"}');
-        
-        return data.map((candle) {
-          return <num>[
-            DateTime.parse(candle['candle_date_time_utc']).millisecondsSinceEpoch,
-            candle['trade_price'],
-          ];
-        }).toList().cast<List<num>>();
-      } else {
-        print('성공여부 : 실패 (${response.statusCode})');
-        throw Exception('API 응답 오류: ${response.statusCode}');
+        // 종가(trade_price)와 시간(timestamp) 데이터만 추출
+        return data.map<List<num>>((item) {
+          final timestamp = DateTime.parse(item['candle_date_time_utc'] + 'Z')
+              .millisecondsSinceEpoch.toDouble();
+          final closePrice = (item['trade_price'] as num).toDouble();
+          return [timestamp, closePrice];
+        }).toList();
       }
+      return [];
     } catch (e) {
-      print('성공여부 : 실패 (${e.toString()})');
-      rethrow;
+      print('비트코인 가격 데이터 로딩 실패: $e');
+      return [];
     }
   }
 } 

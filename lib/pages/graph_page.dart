@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/trade.dart';
 import '../widgets/pie_chart_widget.dart';
-import '../widgets/btc_prices_line_chart.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class GraphPage extends StatefulWidget {
@@ -27,21 +26,38 @@ class _GraphPageState extends State<GraphPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // 비트코인 가격 차트
-            BtcPricesLineChart(prices: widget.btcPrices),
+            widget.btcPrices.isEmpty
+                ? btcDataNone()
+                : Container(), // 임시로 빈 컨테이너 추가
 
-            // // 총 거래 건수
-            // totalTradeCount(),
-            
-            // const SizedBox(height: 32),
-
-            // // 파이차트
-            // PieChartWidget(trades: widget.trades),
-
-            // const SizedBox(height: 32),
-
-
+            totalTradeCount(),
+            const SizedBox(height: 32),
+            PieChartWidget(trades: widget.trades),
+            const SizedBox(height: 32),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget btcDataNone() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16,24,16,16),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 200,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: const Color(0xFFEEEEF0),
+        ),
+        child: const Center(
+          child: Text(
+            '비트코인 가격데이터가 없어요.. 😅',
+            style: TextStyle(
+              fontSize: 16,
+              color: Color(0xFF7C7D8B),
+            ),
+          ),
         ),
       ),
     );

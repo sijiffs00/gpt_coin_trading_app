@@ -30,11 +30,8 @@ class _MyHomePageState extends State<MyHomePage> {
   LoadingStatus loadingStatus = LoadingStatus.loading;
   int _selectedIndex = 0;
   
-  // 빈 페이지로 먼저 초기화
-  late final List<Widget> _pages = [
-    const TradesPage(),
-    const Center(child: CircularProgressIndicator()),  // 임시 로딩 위젯
-  ];
+  // 그래프 페이지를 캐시하기 위한 변수
+  late final GraphPage _graphPage;
 
   @override
   void initState() {
@@ -43,18 +40,23 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _initializeApp() async {
-    await Future.wait([
-      fetchTrades(),
-      fetchBtcPricesData(),
-    ]);
+    try {
+      await Future.wait([
+        fetchTrades(),
+        fetchBtcPricesData(),
+      ]);
 
-    // 데이터 로드 후 페이지 업데이트
-    setState(() {
-      _pages[1] = GraphPage(
+      _graphPage = GraphPage(
         trades: trades,
         btcPrices: btcPrices,
       );
-    });
+      
+    } catch (e) {
+      print('데이터 초기화 실패: $e');
+      setState(() {
+        loadingStatus = LoadingStatus.error;
+      });
+    }
   }
 
   Future<void> fetchTrades() async {
@@ -91,19 +93,21 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> fetchBtcPricesData() async {
     try {
       final prices = await UpbitService.getBitcoinPrices();
-      
-      // 데이터 샘플링 및 변환을 여기서 수행
-      final sampledPrices = <List<num>>[];
-      for (var i = 0; i < prices.length; i += 3) {
-        sampledPrices.add(prices[i]);
+      if (prices.isEmpty) return;
+
+      // List<List<num>>을 List<FlSpot>으로 변환
+      final processedPrices = prices.map((price) {
+        // timestamp를 월 단위로 변환 (예: 24.10)
+        final date = DateTime.fromMillisecondsSinceEpoch(price[0].toInt());
+        final xValue = date.year % 100 + (date.month / 12);
+        return FlSpot(xValue, price[1].toDouble());
+      }).toList();
+
+      if (mounted) {
+        setState(() {
+          btcPrices = processedPrices;
+        });
       }
-      
-      setState(() {
-        btcPrices = sampledPrices.map((price) => FlSpot(
-          price[0].toDouble(),
-          price[1].toDouble(),
-        )).toList();
-      });
     } catch (e) {
       print('비트코인 가격 데이터 로딩 실패: $e');
     }
@@ -165,10 +169,23 @@ class _MyHomePageState extends State<MyHomePage> {
           centerTitle: true,
         ),
       ),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _pages,
-      ),
+      body: _selectedIndex == 0 
+        ? const TradesPage()
+        : loadingStatus == LoadingStatus.error
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('데이터를 불러오는데 실패했습니다 😢'),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: _initializeApp,
+                    child: const Text('다시 시도'),
+                  ),
+                ],
+              ),
+            )
+          : _graphPage,
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
