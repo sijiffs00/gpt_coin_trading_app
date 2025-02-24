@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http; 
 import 'dart:convert'; // JSON 처리를 위한 import
 import 'models/trade.dart';
-import 'widgets/trade_card.dart';  
-import 'pages/trade_detail_page.dart';
 import 'package:intl/intl.dart';
 import 'pages/trades_page.dart';
 import 'pages/graph_page.dart';
@@ -146,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: const Color(0xFF007FFF),  // 선택된 아이템 색상
+        selectedItemColor: const Color(0xFFA177FF),  // 선택된 아이템 색상
         unselectedItemColor: const Color(0xFF868697),  // 선택되지 않은 아이템 색상
         backgroundColor: Colors.white,  // 배경색
         elevation: 8,  // 그림자 효과
