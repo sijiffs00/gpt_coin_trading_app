@@ -150,17 +150,31 @@ class TradeCard extends StatelessWidget {
                               fontFamily: 'LINESeedKR'
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 12),
                           if (trade.decision?.toUpperCase() == 'BUY' || 
                               trade.decision?.toUpperCase() == 'SELL')
-                            Text(
-                              '${trade.percentage}%',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: trade.decision?.toUpperCase() == 'BUY' 
-                                    ? const Color(0xFF2DC76D)  // BUY일 때는 초록색 
-                                    : const Color(0xFF007FFF), // SELL일 때는 파란색 
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: trade.decision?.toUpperCase() == 'BUY'
+                                    ? const Color(0x1A2DC76D)  // BUY일 때 연한 초록색
+                                    : trade.decision?.toUpperCase() == 'SELL'
+                                        ? const Color(0x1A007FFF)  // SELL일 때 연한 파란색
+                                        : const Color(0x1A697584), // HOLD일 때 연한 회색
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                '${trade.percentage}%',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: trade.decision?.toUpperCase() == 'BUY' 
+                                      ? Color.fromARGB(255, 38, 177, 96)  
+                                      : const Color(0xFF007FFF),
+                                ),
                               ),
                             ),
                         ],
