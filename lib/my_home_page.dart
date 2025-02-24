@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import 'pages/trades_page.dart';
 import 'pages/graph_page.dart';
 import 'main.dart';  // serverUrl 사용을 위한 import
+import 'services/upbit_service.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -24,16 +26,35 @@ enum LoadingStatus {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Trade> trades = [];
+  List<FlSpot> btcPrices = [];
   LoadingStatus loadingStatus = LoadingStatus.loading;
   int _selectedIndex = 0;
   
-  // GraphPage에 trades 데이터를 전달하도록 수정
-  final List<Widget> _pages = [];  // 초기화를 build에서 할거야
+  // 빈 페이지로 먼저 초기화
+  late final List<Widget> _pages = [
+    const TradesPage(),
+    const Center(child: CircularProgressIndicator()),  // 임시 로딩 위젯
+  ];
 
   @override
   void initState() {
     super.initState();
-    fetchTrades();  // 그래프용 데이터를 가져오기
+    _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    await Future.wait([
+      fetchTrades(),
+      fetchBtcPricesData(),
+    ]);
+
+    // 데이터 로드 후 페이지 업데이트
+    setState(() {
+      _pages[1] = GraphPage(
+        trades: trades,
+        btcPrices: btcPrices,
+      );
+    });
   }
 
   Future<void> fetchTrades() async {
@@ -63,6 +84,28 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         loadingStatus = LoadingStatus.error;
       });
+    }
+  }
+
+  // 비트코인 가격 데이터를 가져오는 함수 추가
+  Future<void> fetchBtcPricesData() async {
+    try {
+      final prices = await UpbitService.getBitcoinPrices();
+      
+      // 데이터 샘플링 및 변환을 여기서 수행
+      final sampledPrices = <List<num>>[];
+      for (var i = 0; i < prices.length; i += 3) {
+        sampledPrices.add(prices[i]);
+      }
+      
+      setState(() {
+        btcPrices = sampledPrices.map((price) => FlSpot(
+          price[0].toDouble(),
+          price[1].toDouble(),
+        )).toList();
+      });
+    } catch (e) {
+      print('비트코인 가격 데이터 로딩 실패: $e');
     }
   }
 
@@ -101,13 +144,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // 여기서 _pages를 초기화해서 trades 데이터를 전달
-    _pages.clear();  // 기존 항목들 제거
-    _pages.addAll([
-      const TradesPage(),  // TradesPage는 자체적으로 데이터를 가져오니까 그대로 둬
-      GraphPage(trades: trades),  // GraphPage에 trades 데이터 전달
-    ]);
-
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
@@ -129,7 +165,10 @@ class _MyHomePageState extends State<MyHomePage> {
           centerTitle: true,
         ),
       ),
-      body: _pages[_selectedIndex],  // 선택된 페이지 표시
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _pages,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
@@ -144,11 +183,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: const Color(0xFFA177FF),  // 선택된 아이템 색상
-        unselectedItemColor: const Color(0xFF868697),  // 선택되지 않은 아이템 색상
-        backgroundColor: Colors.white,  // 배경색
-        elevation: 8,  // 그림자 효과
-        type: BottomNavigationBarType.fixed,  // 고정 스타일
+        selectedItemColor: const Color(0xFFA177FF),
+        unselectedItemColor: const Color(0xFF868697),
+        backgroundColor: Colors.white,
+        elevation: 8,
+        type: BottomNavigationBarType.fixed,
         onTap: (index) {
           setState(() {
             _selectedIndex = index;
