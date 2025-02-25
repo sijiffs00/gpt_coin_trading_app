@@ -45,19 +45,31 @@ class _GraphPageState extends State<GraphPage> {
       padding: const EdgeInsets.fromLTRB(16,24,16,16),
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height: 200,
+        height: 230,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: const Color(0xFFEEEEF0),
-        ),
-        child: const Center(
-          child: Text(
-            '비트코인 가격데이터가 없어요.. 😅',
-            style: TextStyle(
-              fontSize: 16,
-              color: Color(0xFF7C7D8B),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 10,
+              offset: const Offset(0, 2),
             ),
-          ),
+          ],
+          color: Colors.white,
+        ),
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            Text(
+              'BTC 가격 데이터 ... 없어 ..',
+              style: TextStyle(
+                fontSize: 18,
+                color: Color(0xFF7C7D8B),
+              ),
+            ),
+            Image.asset('assets/die_gom.png',width : MediaQuery.of(context).size.width*0.5)
+          ],
         ),
       ),
     );
