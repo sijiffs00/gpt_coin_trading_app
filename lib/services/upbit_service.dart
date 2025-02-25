@@ -6,27 +6,31 @@ class UpbitService {
 
   static Future<List<List<num>>> getBitcoinPrices() async {
     try {
-      // 시작 날짜 설정 (2024년 10월 1일)
-      final startDate = DateTime(2024, 10, 1);
+      // 현재 시간을 KST(한국 시간)로 변환
       final now = DateTime.now();
+      final to = DateTime(now.year, now.month, now.day).millisecondsSinceEpoch ~/ 1000;
       
-      // 시작 시간과 현재 시간을 Unix timestamp(초 단위)로 변환
-      final to = now.millisecondsSinceEpoch ~/ 1000;
-      final from = startDate.millisecondsSinceEpoch ~/ 1000;
+      // 200일 전 데이터부터 요청
+      final from = to - (200 * 24 * 60 * 60);
 
       final url = Uri.parse(
         'https://api.upbit.com/v1/candles/days'
         '?market=KRW-BTC'
-        '&count=200'  // 최대 데이터 개수
-        '&to=${to}'
-        '&from=${from}'
-      );
+        '&count=200'
+      );  // to와 from 파라미터는 제거
+
+      print('요청 URL: $url'); // URL 확인
 
       final response = await http.get(url);
+      print('응답 상태 코드: ${response.statusCode}'); // 상태 코드 확인
+      // print('응답 내용: ${response.body}'); // 응답 데이터 확인
+
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         
-        // 종가(trade_price)와 시간(timestamp) 데이터만 추출
+        // 데이터 변환 전 확인
+        // print('파싱된 데이터: $data');
+        
         return data.map<List<num>>((item) {
           final timestamp = DateTime.parse(item['candle_date_time_utc'] + 'Z')
               .millisecondsSinceEpoch.toDouble();
@@ -36,7 +40,7 @@ class UpbitService {
       }
       return [];
     } catch (e) {
-      print('비트코인 가격 데이터 로딩 실패: $e');
+      print('비트코인 가격 데이터 로딩 실패: $e'); // 에러 상세 내용 확인
       return [];
     }
   }

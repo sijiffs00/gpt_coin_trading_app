@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/trade.dart';
 import '../widgets/pie_chart_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'dart:math' as math;
 
 class GraphPage extends StatefulWidget {
   final List<Trade> trades;
@@ -20,6 +21,10 @@ class GraphPage extends StatefulWidget {
 class _GraphPageState extends State<GraphPage> {
   @override
   Widget build(BuildContext context) {
+    // 최소값과 최대값 계산
+    final minY = widget.btcPrices.map((spot) => spot.y).reduce(math.min) - 500;
+    final maxY = widget.btcPrices.map((spot) => spot.y).reduce(math.max) + 500;
+
     return Container(
       color: const Color(0xFFF8F9FD),
       child: SingleChildScrollView(
@@ -28,8 +33,63 @@ class _GraphPageState extends State<GraphPage> {
           children: [
             widget.btcPrices.isEmpty
                 ? btcDataNone()
-                : Container(), // 임시로 빈 컨테이너 추가
-
+                : Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 230,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 1,
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                        color: Colors.white,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: LineChart(
+                          LineChartData(
+                            minY: minY,
+                            maxY: maxY,
+                            gridData: FlGridData(show: true),
+                            titlesData: FlTitlesData(
+                              leftTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              bottomTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              rightTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              topTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                            ),
+                            borderData: FlBorderData(show: false),
+                            lineBarsData: [
+                              LineChartBarData(
+                                spots: widget.btcPrices,
+                                isCurved: true,
+                                color: const Color(0xFFA177FF),
+                                barWidth: 2,
+                                dotData: FlDotData(show: false),
+                                belowBarData: BarAreaData(
+                                  show: true,
+                                  color: const Color(0xFFA177FF).withOpacity(0.1),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
             totalTradeCount(),
             const SizedBox(height: 32),
             PieChartWidget(trades: widget.trades),
