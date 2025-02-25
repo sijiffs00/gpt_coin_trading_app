@@ -172,18 +172,37 @@ class _MyHomePageState extends State<MyHomePage> {
       body: _selectedIndex == 0 
         ? const TradesPage()
         : loadingStatus == LoadingStatus.error
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('데이터를 불러오는데 실패했습니다 😢'),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _initializeApp,
-                    child: const Text('다시 시도'),
+          ? Container(  // Container로 감싸서 배경색 지정
+              color: Colors.white,  // 배경색을 흰색으로 설정
+              child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('서버 연결이 안된다고', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF666666)),),
+              SizedBox(height: 14),
+              Image.asset('assets/angry_gom.png',width: MediaQuery.of(context).size.width*0.5,),
+              InkWell(
+                onTap: _initializeApp,
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 6,horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 237, 237, 239),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 1,
+                        blurRadius: 4,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                  child: Text('재시도', style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,color: Color(0xFF3B3C51))),
+                ),
+              )
+            ],
+          )
+        ),
             )
           : _graphPage,
       bottomNavigationBar: BottomNavigationBar(

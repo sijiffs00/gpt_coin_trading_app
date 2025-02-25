@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 // 서버 주소 설정
-const String serverUrl = 'http://172.30.1.20:8000';  // 맥북 로컬 
+const String serverUrl = 'http://172.30.1.6:8000';  // 맥북 로컬 
 // const String serverUrl = 'http://15.164.48.123:8000';  // EC2
 
 // 백그라운드 메시지를 처리하는 함수야
@@ -23,7 +23,21 @@ void main() async {
     WidgetsFlutterBinding.ensureInitialized();
     print('Flutter Binding 초기화 완료');
     
-    // 바로 앱을 실행하고, 나머지 초기화는 FutureBuilder에서 처리할거야
+    // Firebase 초기화를 여기서 먼저 해주자
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    print('Firebase 초기화 완료');
+
+    // 날짜 포맷 초기화도 여기서
+    await initializeDateFormatting('ko_KR', null);
+    print('날짜 포맷 초기화 완료');
+
+    // FCM 설정
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    print('FCM 백그라운드 핸들러 설정 완료');
+
+    // 이제 앱 실행
     runApp(const MyApp());
     print('앱 실행 완료');
   } catch (e) {
@@ -83,7 +97,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 // 앱 초기화 함수를 따로 만들어줄게
 Future<void> _initializeApp() async {
   await initializeDateFormatting('ko_KR', null);
@@ -124,3 +137,4 @@ Future<void> _initializeApp() async {
     }
   }
 }
+

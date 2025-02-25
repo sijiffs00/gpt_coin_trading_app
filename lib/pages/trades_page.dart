@@ -141,13 +141,30 @@ class _TradesPageState extends State<TradesPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('서버 꺼져있음'),
-              ElevatedButton(
-                onPressed: fetchTrades,
-                child: const Text('새로고침'),
-              ),
+              Text('서버 연결이 안되는데 ..??', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF666666)),),
+              SizedBox(height: 14),
+              Image.asset('assets/angry_gom2.png',width: MediaQuery.of(context).size.width*0.5,),
+              InkWell(
+                onTap: fetchTrades,
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 6,horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 237, 237, 239),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 1,
+                        blurRadius: 4,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Text('재시도', style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,color: Color(0xFF3B3C51))),
+                ),
+              )
             ],
-          ),
+          )
         );
       case LoadingStatus.success:
         final groupedTrades = groupTradesByDate();
