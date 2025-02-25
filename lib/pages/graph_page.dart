@@ -58,17 +58,53 @@ class _GraphPageState extends State<GraphPage> {
           ],
           color: Colors.white,
         ),
-        child: Column(
+        child: Stack(
+          alignment: Alignment.center,
           children: [
-            const SizedBox(height: 20),
-            Text(
-              'BTC 가격 데이터 ... 없어 ..',
-              style: TextStyle(
-                fontSize: 18,
-                color: Color(0xFF7C7D8B),
+            Positioned(
+              left: 50,
+              top: 38,
+              child: Text(
+                'BTC 가격 데이터 ... 없어 ..',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Color(0xFF7C7D8B),
+                ),
               ),
             ),
-            Image.asset('assets/die_gom.png',width : MediaQuery.of(context).size.width*0.5)
+            Positioned(
+              left: 15,
+              bottom: 10,
+              child: Image.asset(
+                'assets/die_gom.png',
+                width: MediaQuery.of(context).size.width * 0.5,
+              ),
+            ),
+
+            Positioned(
+              right: 30,
+              bottom: 28,
+              child: InkWell(
+                onTap: () {
+                  print('재시도');
+                },
+                child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 6,horizontal: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 1,
+                          blurRadius: 4,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),                
+                  child: Text('📡 재시도', style: TextStyle(fontSize: 24),)),
+              ),
+            )
           ],
         ),
       ),
