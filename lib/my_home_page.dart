@@ -94,9 +94,12 @@ class _MyHomePageState extends State<MyHomePage> {
       prices.sort((a, b) => a[0].compareTo(b[0]));
 
       final spots = prices.asMap().entries.map((entry) {
-        final timestamp = DateTime.fromMillisecondsSinceEpoch(prices[entry.key][0].toInt());
-        final firstTimestamp = DateTime.fromMillisecondsSinceEpoch(prices[0][0].toInt());
-        final daysDifference = timestamp.difference(firstTimestamp).inDays.toDouble();
+        final timestamp =
+            DateTime.fromMillisecondsSinceEpoch(prices[entry.key][0].toInt());
+        final firstTimestamp =
+            DateTime.fromMillisecondsSinceEpoch(prices[0][0].toInt());
+        final daysDifference =
+            timestamp.difference(firstTimestamp).inDays.toDouble();
 
         final priceInWon = prices[entry.key][1].toDouble();
         return FlSpot(daysDifference, priceInWon);
@@ -151,13 +154,24 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // 서버 종류를 확인하는 문자열을 만들어줄게
+    String serverType = serverUrl.contains('172.30') ? '🏠로컬' : '🔋EC2';
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
         child: AppBar(
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Text(
+                serverType, // 여기에 서버 종류를 표시해줄거야
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF666666),
+                ),
+              ),
               Image.asset(
                 'assets/dance.gif',
                 height: 60,
