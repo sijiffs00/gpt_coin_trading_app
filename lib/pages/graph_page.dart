@@ -3,6 +3,7 @@ import '../models/trade.dart';
 import '../widgets/pie_chart_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:math' as math;
+import 'package:intl/intl.dart';
 
 class GraphPage extends StatefulWidget {
   final List<Trade> trades;
@@ -62,7 +63,26 @@ class _GraphPageState extends State<GraphPage> {
                                 sideTitles: SideTitles(showTitles: false),
                               ),
                               bottomTitles: AxisTitles(
-                                sideTitles: SideTitles(showTitles: false),
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  reservedSize: 30,
+                                  getTitlesWidget: (value, meta) {
+                                    final date = DateTime.now().subtract(
+                                      Duration(days: (widget.btcPrices.length - value.toInt())),
+                                    );
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text(
+                                        DateFormat('M/d').format(date),
+                                        style: TextStyle(
+                                          color: Color(0xFF868697),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  interval: widget.btcPrices.length / 6,
+                                ),
                               ),
                               rightTitles: AxisTitles(
                                 sideTitles: SideTitles(showTitles: false),

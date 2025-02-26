@@ -89,25 +89,30 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> fetchBtcPricesData() async {
     try {
       final prices = await UpbitService.getBitcoinPrices();
-      // print(prices);
       if (prices.isEmpty) return;
 
-      // 데이터를 날짜 순서대로 정렬 (오름차순)
       prices.sort((a, b) => a[0].compareTo(b[0]));
 
-      // List<List<num>>을 List<FlSpot>으로 변환
       final spots = prices.asMap().entries.map((entry) {
-        final x = entry.key.toDouble();
-        final y = entry.value[1] / 10000.0;  // 원화를 만원 단위로 변환
-        return FlSpot(x, y);
+        final timestamp =
+            DateTime.fromMillisecondsSinceEpoch(prices[entry.key][0].toInt());
+        final firstTimestamp =
+            DateTime.fromMillisecondsSinceEpoch(prices[0][0].toInt());
+        final daysDifference =
+            timestamp.difference(firstTimestamp).inDays.toDouble();
+
+        // 가격을 원화에서 억/천만원 단위로 변환
+        final priceInWon = prices[entry.key][1].toDouble();
+        final priceInTenThousand = priceInWon; // 이제 나누지 않음
+
+        return FlSpot(daysDifference, priceInTenThousand);
       }).toList();
 
       if (mounted) {
         setState(() {
           btcPrices = spots;
         });
-
-        // print(btcPrices);
+        print(btcPrices);
       }
     } catch (e) {
       print('비트코인 가격 데이터 로딩 실패: $e');
