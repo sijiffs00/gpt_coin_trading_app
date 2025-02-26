@@ -7,6 +7,7 @@ class Trade {
   final int? percentage;
   final String? reason;
   final String? original_reason;
+  final String? lookback;
 
   Trade({
     this.id,
@@ -17,6 +18,7 @@ class Trade {
     this.percentage,
     this.reason,
     this.original_reason,
+    this.lookback,
   });
 
   factory Trade.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,21 @@ class Trade {
       percentage: json['percentage'] as int?,
       reason: json['reason'] as String?,
       original_reason: json['original_reason'] as String?,
+      lookback: json['lookback'] as String?,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'timestamp': timestamp,
+      'img': img,
+      'price': price,
+      'decision': decision,
+      'percentage': percentage,
+      'reason': reason,
+      'original_reason': original_reason,
+      'lookback': lookback,
+    };
   }
 } 

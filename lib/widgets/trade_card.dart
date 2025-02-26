@@ -4,26 +4,26 @@ import '../models/trade.dart';
 
 class TradeCard extends StatelessWidget {
   final Trade trade;
-  final Function(Trade) onTap;  // 탭 이벤트를 처리할 콜백 함수 추가
+  final Function(Trade) onTap; // 탭 이벤트를 처리할 콜백 함수 추가
 
   const TradeCard({
     super.key,
     required this.trade,
-    required this.onTap,  // 필수 파라미터로 추가
+    required this.onTap, // 필수 파라미터로 추가
   });
 
   // 날짜 포맷을 처리하는 함수
   String formatTimestamp(String timestamp) {
     final DateTime dateTime = DateTime.parse(timestamp);
     final DateTime now = DateTime.now();
-    final bool isToday = dateTime.year == now.year && 
-                        dateTime.month == now.month && 
-                        dateTime.day == now.day;
-    
+    final bool isToday = dateTime.year == now.year &&
+        dateTime.month == now.month &&
+        dateTime.day == now.day;
+
     // 어제 날짜인지 확인
     final bool isYesterday = dateTime.year == now.year &&
-                            dateTime.month == now.month &&
-                            dateTime.day == now.day - 1;
+        dateTime.month == now.month &&
+        dateTime.day == now.day - 1;
 
     if (isToday) {
       // 오전/오후를 직접 처리
@@ -31,7 +31,7 @@ class TradeCard extends StatelessWidget {
       final minute = dateTime.minute.toString().padLeft(2, '0');
       final period = hour < 12 ? '오전' : '오후';
       final displayHour = hour <= 12 ? hour : hour - 12;
-      
+
       return '$period $displayHour:$minute';
     } else if (isYesterday) {
       // 어제인 경우 '어제 HH:mm' 형식
@@ -48,17 +48,17 @@ class TradeCard extends StatelessWidget {
       case 'BUY':
         return {
           'image': 'assets/buy_img.png',
-          'backgroundColor': const Color(0x332DC76D),  // 초록색 배경
+          'backgroundColor': const Color(0x332DC76D), // 초록색 배경
         };
       case 'SELL':
         return {
           'image': 'assets/sell_img.png',
-          'backgroundColor': const Color(0x33007FFF),  // 파란색 배경
+          'backgroundColor': const Color(0x33007FFF), // 파란색 배경
         };
       case 'HOLD':
         return {
           'image': 'assets/hold_img.png',
-          'backgroundColor': const Color(0x33868697),  // 회색 배경
+          'backgroundColor': const Color(0x33868697), // 회색 배경
         };
       default:
         return {
@@ -70,7 +70,7 @@ class TradeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final decisionStyle = getDecisionStyle();  // 스타일 정보 가져오기
+    final decisionStyle = getDecisionStyle(); // 스타일 정보 가져오기
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
@@ -129,7 +129,7 @@ class TradeCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 32),
-                
+
                 // 중앙: 거래 정보
                 Expanded(
                   child: Column(
@@ -144,14 +144,13 @@ class TradeCard extends StatelessWidget {
                           Text(
                             trade.decision ?? 'UNKNOWN',
                             style: const TextStyle(
-                              fontSize: 21, 
-                              fontWeight: FontWeight.w800,
-                              color: Color.fromARGB(255, 95, 89, 112),
-                              fontFamily: 'LINESeedKR'
-                            ),
+                                fontSize: 21,
+                                fontWeight: FontWeight.w800,
+                                color: Color.fromARGB(255, 95, 89, 112),
+                                fontFamily: 'LINESeedKR'),
                           ),
                           const SizedBox(width: 12),
-                          if (trade.decision?.toUpperCase() == 'BUY' || 
+                          if (trade.decision?.toUpperCase() == 'BUY' ||
                               trade.decision?.toUpperCase() == 'SELL')
                             Container(
                               padding: const EdgeInsets.symmetric(
@@ -160,10 +159,12 @@ class TradeCard extends StatelessWidget {
                               ),
                               decoration: BoxDecoration(
                                 color: trade.decision?.toUpperCase() == 'BUY'
-                                    ? const Color(0x1A2DC76D)  // BUY일 때 연한 초록색
+                                    ? const Color(0x1A2DC76D) // BUY일 때 연한 초록색
                                     : trade.decision?.toUpperCase() == 'SELL'
-                                        ? const Color(0x1A007FFF)  // SELL일 때 연한 파란색
-                                        : const Color(0x1A697584), // HOLD일 때 연한 회색
+                                        ? const Color(
+                                            0x1A007FFF) // SELL일 때 연한 파란색
+                                        : const Color(
+                                            0x1A697584), // HOLD일 때 연한 회색
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Text(
@@ -171,8 +172,8 @@ class TradeCard extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
-                                  color: trade.decision?.toUpperCase() == 'BUY' 
-                                      ? Color.fromARGB(255, 38, 177, 96)  
+                                  color: trade.decision?.toUpperCase() == 'BUY'
+                                      ? Color.fromARGB(255, 38, 177, 96)
                                       : const Color(0xFF007FFF),
                                 ),
                               ),
@@ -182,8 +183,10 @@ class TradeCard extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         NumberFormat('#,###').format((trade.price ?? 0) / 1000),
-                        style: const TextStyle(fontSize: 14, color: Color(0xff697584)),
+                        style: const TextStyle(
+                            fontSize: 14, color: Color(0xff697584)),
                       ),
+                      Text('lookback: ${trade.lookback}', style: TextStyle(fontSize: 12, color: Color(0xff697584))),
                     ],
                   ),
                 ),
@@ -203,4 +206,4 @@ class TradeCard extends StatelessWidget {
       ),
     );
   }
-} 
+}

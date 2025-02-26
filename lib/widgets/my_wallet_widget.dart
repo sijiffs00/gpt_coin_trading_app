@@ -66,7 +66,7 @@ class _MyWalletWidgetState extends State<MyWalletWidget> {
           BoxShadow(
             color: Colors.grey.withOpacity(0.2),
             spreadRadius: 1,
-            blurRadius: 10,
+            blurRadius: 10, 
             offset: const Offset(0, 2),
           ),
         ],
