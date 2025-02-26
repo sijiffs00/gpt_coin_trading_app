@@ -94,25 +94,18 @@ class _MyHomePageState extends State<MyHomePage> {
       prices.sort((a, b) => a[0].compareTo(b[0]));
 
       final spots = prices.asMap().entries.map((entry) {
-        final timestamp =
-            DateTime.fromMillisecondsSinceEpoch(prices[entry.key][0].toInt());
-        final firstTimestamp =
-            DateTime.fromMillisecondsSinceEpoch(prices[0][0].toInt());
-        final daysDifference =
-            timestamp.difference(firstTimestamp).inDays.toDouble();
+        final timestamp = DateTime.fromMillisecondsSinceEpoch(prices[entry.key][0].toInt());
+        final firstTimestamp = DateTime.fromMillisecondsSinceEpoch(prices[0][0].toInt());
+        final daysDifference = timestamp.difference(firstTimestamp).inDays.toDouble();
 
-        // 가격을 원화에서 억/천만원 단위로 변환
         final priceInWon = prices[entry.key][1].toDouble();
-        final priceInTenThousand = priceInWon; // 이제 나누지 않음
-
-        return FlSpot(daysDifference, priceInTenThousand);
+        return FlSpot(daysDifference, priceInWon);
       }).toList();
 
       if (mounted) {
         setState(() {
           btcPrices = spots;
         });
-        print(btcPrices);
       }
     } catch (e) {
       print('비트코인 가격 데이터 로딩 실패: $e');

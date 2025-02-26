@@ -22,9 +22,12 @@ class GraphPage extends StatefulWidget {
 class _GraphPageState extends State<GraphPage> {
   @override
   Widget build(BuildContext context) {
-    // 최소값과 최대값 계산
-    final minY = widget.btcPrices.map((spot) => spot.y).reduce(math.min) - 500;
-    final maxY = widget.btcPrices.map((spot) => spot.y).reduce(math.max) + 500;
+    // 최소값과 최대값 계산 (여백 없이)
+    final minY = widget.btcPrices.map((spot) => spot.y).reduce(math.min);
+    final maxY = widget.btcPrices.map((spot) => spot.y).reduce(math.max);
+    
+    // 4개의 눈금을 위한 간격 계산
+    final interval = (maxY - minY) / 3;
 
     return Container(
       color: const Color(0xFFF8F9FD),
@@ -60,7 +63,38 @@ class _GraphPageState extends State<GraphPage> {
                             gridData: FlGridData(show: true),
                             titlesData: FlTitlesData(
                               leftTitles: AxisTitles(
-                                sideTitles: SideTitles(showTitles: false),
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  interval: interval,
+                                  reservedSize: 30,
+                                  getTitlesWidget: (value, meta) {
+                                    // 가격을 억 단위로 변환
+                                    final priceInBillion = value / 100000000;  // 1억으로 나누기
+                                    
+                                    String formattedPrice;
+                                    if (priceInBillion >= 1) {
+                                      // 1억 이상인 경우
+                                      formattedPrice = '${NumberFormat('#,##0.0').format(priceInBillion)}억';
+                                    } else {
+                                      // 1억 미만인 경우 (천만원 단위로 표시)
+                                      final priceInTenMillion = value / 10000000;  // 천만으로 나누기
+                                      formattedPrice = '${NumberFormat('#,##0').format(priceInTenMillion)}천';
+                                    }
+
+                                    return Text(
+                                      formattedPrice,
+                                      style: TextStyle(
+                                        color: value == minY || value == maxY 
+                                          ? Color(0xFFA177FF)  // 최대/최소값은 보라색으로
+                                          : Color(0xFF868697), // 나머지는 회색으로
+                                        fontSize: 12,
+                                        fontWeight: value == minY || value == maxY 
+                                          ? FontWeight.bold 
+                                          : FontWeight.normal,
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                               bottomTitles: AxisTitles(
                                 sideTitles: SideTitles(
