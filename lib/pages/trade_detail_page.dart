@@ -9,28 +9,13 @@ class TradeDetailPage extends StatelessWidget {
     required this.trade,
   });
 
-  // decision에 따른 타이틀을 반환하는 함수
-  String getDecisionTitle() {
-    // null이거나 빈 문자열이면 '❓' 반환
-    if (trade.decision?.isEmpty ?? true) return '❓';
-    
-    switch (trade.decision!.toUpperCase()) {
-      case 'BUY':
-        return '🔥';
-      case 'SELL':
-        return '✅';
-      case 'HOLD':
-        return '⬛️';
-      default:
-        return trade.decision!;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(getDecisionTitle()),  // 여기서 decision에 맞는 타이틀 사용
+        title: Text('${trade.decision}'),  // 여기서 decision에 맞는 타이틀 사용
         elevation: 8,
         shadowColor: Colors.black38,
         surfaceTintColor: Colors.transparent,
@@ -42,8 +27,9 @@ class TradeDetailPage extends StatelessWidget {
           children: [
             // 차트 이미지
             if (trade.img != null) 
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
+              Container(
+                width: 150,
+                height: 150,
                 child: Image.network(
                   trade.img!,
                   width: double.infinity,
@@ -52,19 +38,10 @@ class TradeDetailPage extends StatelessWidget {
               ),
             const SizedBox(height: 16),
             // 거래 정보
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
+            Container(
+              child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '매매 결정: ${trade.decision ?? '없음'}',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
                     const SizedBox(height: 8),
                     Text(
                       '가격: ${trade.price ?? '없음'}',
@@ -94,7 +71,7 @@ class TradeDetailPage extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
+              
             ),
           ],
         ),
