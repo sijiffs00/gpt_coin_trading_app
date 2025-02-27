@@ -4,7 +4,6 @@ class Trade {
   final String? img;
   final double? price;
   final String? decision;
-  final int? percentage;
   final String? reason;
   final String? original_reason;
   final String? lookback;
@@ -15,7 +14,6 @@ class Trade {
     this.img,
     this.price,
     this.decision,
-    this.percentage,
     this.reason,
     this.original_reason,
     this.lookback,
@@ -28,7 +26,6 @@ class Trade {
       img: json['img'] as String?,
       price: json['price'] != null ? (json['price'] as num).toDouble() : null,
       decision: json['decision'] as String?,
-      percentage: json['percentage'] as int?,
       reason: json['reason'] as String?,
       original_reason: json['original_reason'] as String?,
       lookback: json['lookback'] as String?,
@@ -42,7 +39,6 @@ class Trade {
       'img': img,
       'price': price,
       'decision': decision,
-      'percentage': percentage,
       'reason': reason,
       'original_reason': original_reason,
       'lookback': lookback,
