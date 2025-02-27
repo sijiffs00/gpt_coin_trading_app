@@ -154,38 +154,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // 서버 종류를 확인하는 문자열을 만들어줄게
-    String serverType = serverUrl.contains('172.30') ? '🏠로컬' : '🔋EC2';
-
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80),
-        child: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                serverType, // 여기에 서버 종류를 표시해줄거야
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF666666),
-                ),
-              ),
-              Image.asset(
-                'assets/dance.gif',
-                height: 60,
-                fit: BoxFit.contain,
-              ),
-            ],
-          ),
-          elevation: 8,
-          shadowColor: Colors.black38,
-          surfaceTintColor: Colors.transparent,
-          backgroundColor: Colors.white,
-          centerTitle: true,
-        ),
-      ),
+          preferredSize: const Size.fromHeight(80), child: myAppBar()),
       body: _selectedIndex == 0
           ? const TradesPage()
           : loadingStatus == LoadingStatus.error
@@ -261,6 +232,42 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         },
       ),
+    );
+  }
+
+  Widget myAppBar() {
+    // serverType 변수를 여기서 다시 정의해줘
+    String serverType = serverUrl.contains('172.30') ? '🏠로컬' : '🔋EC2';
+
+    return AppBar(
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 16),
+        child: Text(
+          serverType,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF666666),
+          ),
+        ),
+      ),
+      // actions 속성을 추가해서 우측에 춤추는 곰돌이를 넣어줄게
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(
+              right: 16, bottom: 8), // 우측과 하단에 여백을 줘서 위치 조절
+          child: Image.asset(
+            'assets/dance.gif', // gif 파일 경로
+            width: 60, // 이미지 크기 조절
+            height: 60,
+          ),
+        ),
+      ],
+      elevation: 8,
+      shadowColor: Colors.black38,
+      surfaceTintColor: Colors.transparent,
+      backgroundColor: Colors.white,
+      centerTitle: true,
     );
   }
 }
