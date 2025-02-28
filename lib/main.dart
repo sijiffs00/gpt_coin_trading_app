@@ -9,8 +9,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 // 서버 주소 설정
-// const String serverUrl = 'http://172.30.1.6:8000';  // 맥북 로컬 
-const String serverUrl = 'http://15.164.48.123:8000';  // EC2
+const String serverUrl = 'http://172.30.1.6:8000';  // 맥북 로컬 
+// const String serverUrl = 'http://15.164.48.123:8000';  // EC2
 
 // 백그라운드 메시지를 처리하는 함수야
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

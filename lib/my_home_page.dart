@@ -155,8 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(80), child: myAppBar()),
+      appBar: myAppBar(),
       body: _selectedIndex == 0
           ? const TradesPage()
           : loadingStatus == LoadingStatus.error
@@ -235,9 +234,9 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget myAppBar() {
+  AppBar myAppBar() {
     // serverType 변수를 여기서 다시 정의해줘
-    String serverType = serverUrl.contains('172.30') ? '🏠로컬' : '🔋EC2';
+    String serverType = serverUrl.contains('172.30') ? '🏠' : '🔋';
 
     return AppBar(
       leading: Padding(
@@ -245,7 +244,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Text(
           serverType,
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
             color: Color(0xFF666666),
           ),

@@ -119,7 +119,7 @@ class TradeCard extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     color: decisionStyle['backgroundColor'],
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(24),
                   ),
                   child: Image.asset(
                     decisionStyle['image'],
@@ -150,6 +150,15 @@ class TradeCard extends StatelessWidget {
                                 fontFamily: 'LINESeedKR'),
                           ),
                           const SizedBox(width: 12),
+                          Icon(
+                            trade.lookback != null
+                                ? Icons.description
+                                : Icons.description_outlined,
+                            size: 16,
+                            color: trade.lookback != null
+                                ? Color(0xFF5F5970)
+                                : Color(0xFFBBBBBB),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 8),
@@ -158,7 +167,6 @@ class TradeCard extends StatelessWidget {
                         style: const TextStyle(
                             fontSize: 14, color: Color(0xff697584)),
                       ),
-                      Text('lookback: ${trade.lookback}', style: TextStyle(fontSize: 12, color: Color(0xff697584))),
                     ],
                   ),
                 ),
