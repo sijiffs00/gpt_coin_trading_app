@@ -82,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // 탭에 따라 표시할 화면 목록
   List<Widget> _getPages() {
     return [
-      const TradesPage(), // TradesPage는 자체적으로 데이터를 가져옴
+      TradesPage(trades: trades), // TradesPage에도 trades 데이터 전달
       GraphPage(trades: trades, btcPrices: btcPrices), // GraphPage에는 데이터 전달
     ];
   }
