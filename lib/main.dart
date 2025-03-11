@@ -147,3 +147,5 @@ Future<void> _initializeApp() async {
   }
 }
 
+enum DataStatus { success, empty, error }
+
