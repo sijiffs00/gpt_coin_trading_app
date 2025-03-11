@@ -125,8 +125,19 @@ class _TradesPageState extends State<TradesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,     
-      body: _buildBody(),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFE0C3FC),  // 연한 보라색
+              Color(0xFF8EC5FC),  // 연한 파란색
+            ],
+          ),
+        ),
+        child: _buildBody(),
+      ),
     );
   }
 
