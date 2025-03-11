@@ -9,8 +9,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 // 서버 주소 설정
-const String serverUrl = 'http://172.30.1.6:8000';  // 맥북 로컬 
-// const String serverUrl = 'http://15.164.48.123:8000';  // EC2
+// const String serverUrl = 'http://172.30.1.6:8000';  // 맥북 로컬 
+const String serverUrl = 'http://15.164.48.123:8000';  // EC2
 
 // 백그라운드 메시지를 처리하는 함수야
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -46,6 +46,40 @@ void main() async {
   }
 }
 
+// 로딩 화면 위젯을 별도로 분리
+class LoadingScreen extends StatelessWidget {
+  const LoadingScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/running_gom.gif',
+              width: 300,  // GIF 크기 조절
+              height: 300,
+            ),
+            const SizedBox(height: 16),
+
+            Text(
+              '가보자고',
+              style: TextStyle(
+                fontFamily: 'Tenada',
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -53,7 +87,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -64,31 +97,7 @@ class MyApp extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // 초기화 중일 때 보여줄 로딩 화면
-            return Scaffold(
-              backgroundColor: Colors.white,
-              body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/running_gom.gif',
-                      width: 300,  // GIF 크기 조절
-                      height: 300,
-                    ),
-                    const SizedBox(height: 16),
-
-                    Text(
-                      '가보자고',
-                      style: TextStyle(
-                        fontFamily: 'Tenada',
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
+            return const LoadingScreen();
           }
           // 초기화가 완료되면 메인 화면으로!
           return const MyHomePage();
