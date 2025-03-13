@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import '../models/trade.dart';
-import '../widgets/trade_card.dart';
 import '../pages/trade_detail_page.dart';
 import 'package:intl/intl.dart';
-import '../main.dart';  // serverUrl 사용을 위한 import
-
 
 class TradesPage extends StatefulWidget {
   // trades 데이터를 받을 수 있도록 생성자 수정

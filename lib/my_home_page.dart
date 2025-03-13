@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gpt_coin_trading/widgets/custom_navigation_bar.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert'; // JSON 처리를 위한 import
+import 'dart:convert'; 
 import 'models/trade.dart';
 import 'pages/trades_page.dart';
 import 'pages/graph_page.dart';
-import 'main.dart'; // serverUrl 사용을 위한 import
+import 'main.dart'; 
 import 'package:fl_chart/fl_chart.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -30,41 +30,20 @@ class _MyHomePageState extends State<MyHomePage> {
     fetchData();
   }
 
-  // 데이터 가져오기
+  // 매매기록들 가져오기
   Future<void> fetchData() async {
     try {
-      // 거래 데이터 가져오기
       final tradesResponse = await http.get(Uri.parse('$serverUrl/api/trades'));
       if (tradesResponse.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(tradesResponse.body);
         if (data['success'] == true) {
-          print('연결됨');
-          print(data);
+          
           setState(() {
             trades = (data['trades'] as List)
                 .map((trade) => Trade.fromJson(trade))
                 .toList();
           });
-          print(trades);
-        }
-      }
-
-      // BTC 가격 데이터 가져오기
-      final pricesResponse =
-          await http.get(Uri.parse('$serverUrl/api/btc-prices'));
-      if (pricesResponse.statusCode == 200) {
-        final Map<String, dynamic> data = json.decode(pricesResponse.body);
-        if (data['success'] == true) {
-          final pricesList = data['prices'] as List;
-          setState(() {
-            btcPrices = List.generate(
-              pricesList.length,
-              (index) => FlSpot(
-                index.toDouble(),
-                (pricesList[index]['price'] as num).toDouble(),
-              ),
-            );
-          });
+          
         }
       }
     } catch (e) {
@@ -83,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Widget> _getPages() {
     return [
       TradesPage(trades: trades), // TradesPage에도 trades 데이터 전달
-      GraphPage(trades: trades, btcPrices: btcPrices), // GraphPage에는 데이터 전달
+      GraphPage(trades: trades), // GraphPage에는 데이터 전달
     ];
   }
 
