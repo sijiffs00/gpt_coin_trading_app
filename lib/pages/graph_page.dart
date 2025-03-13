@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/trade.dart';
 import '../widgets/pie_chart_widget.dart';
-import '../widgets/my_wallet_widget.dart';
 
 class GraphPage extends StatefulWidget {
   final List<Trade> trades;
@@ -24,7 +23,6 @@ class _GraphPageState extends State<GraphPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const MyWalletWidget(),
             totalTradeCount(),
             PieChartWidget(trades: widget.trades),
           ],
@@ -32,9 +30,6 @@ class _GraphPageState extends State<GraphPage> {
       ),
     );
   }
-
-
-
 
   Widget totalTradeCount() {
     return Row(
