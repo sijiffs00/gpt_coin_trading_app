@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/trade.dart';
 import '../widgets/pie_chart_widget.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'dart:math' as math;
-import 'package:intl/intl.dart';
 import '../widgets/my_wallet_widget.dart';
 
 class GraphPage extends StatefulWidget {
