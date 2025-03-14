@@ -14,8 +14,8 @@ class LoadingScreen extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFFE0C3FC),  // 연한 보라색
-              Color(0xFF8EC5FC),  // 연한 파란색
+              Color(0xFFF9E7FE),  
+              Color(0xFFDAFCFC),  
             ],
           ),
         ),
@@ -25,7 +25,7 @@ class LoadingScreen extends StatelessWidget {
             children: [
               Image.asset(
                 'assets/running_gom.gif',
-                width: 300,  // GIF 크기 조절
+                width: 300,  
                 height: 300,
               ),
               const SizedBox(height: 16),

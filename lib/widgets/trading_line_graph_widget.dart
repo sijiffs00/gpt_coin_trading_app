@@ -12,7 +12,16 @@ class TradingLineGraphWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.red, // 빨간색 배경
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFF9E7FE),  
+              Color(0xFFDAFCFC),  
+            ],
+          ),
+        ),
       width: double.infinity,
       child: Center(
         child: Column(

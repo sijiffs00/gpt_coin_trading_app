@@ -41,12 +41,12 @@ class _TradesPageState extends State<TradesPage> {
           TradingLineGraphWidget(trades: widget.trades),
           
           // 지갑 정보 위젯 추가
-          Positioned(
-            top: 50,
-            left: 20,
-            right: 20,
-            child: _buildWalletInfoWidget(),
-          ),
+          // Positioned(
+          //   top: 50,
+          //   left: 20,
+          //   right: 20,
+          //   child: _buildWalletInfoWidget(),
+          // ),
           
           // DraggableScrollableSheet로 스크롤 가능한 위젯 구현
           DraggableScrollableSheet(
