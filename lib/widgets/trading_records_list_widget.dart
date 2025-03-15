@@ -184,7 +184,7 @@ class TradingRecordsListWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '⇧ 1.287억',
+                      '⇧ ${trade.getFormattedPrice()} 억',
                       style: TextStyle(fontSize: 16, color: Color(0xff848484)),
                     ),
                     Text(

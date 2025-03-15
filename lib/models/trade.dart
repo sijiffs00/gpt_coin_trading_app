@@ -52,6 +52,15 @@ class Trade {
     return '$period $hour12:$minuteStr';
   }
 
+  // price를 '1.234' 형식으로 변환하는 메서드
+  String getFormattedPrice() {
+    if (price == null) return '0.000';
+    
+    // 100,000,000으로 나누고 소수점 셋째 자리까지 표시
+    final formattedValue = (price! / 100000000).toStringAsFixed(3);
+    return formattedValue;
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
