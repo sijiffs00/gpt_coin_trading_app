@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../models/trade.dart';
-import '../pages/trade_detail_page.dart';
 import 'package:intl/intl.dart';
 
 class TradingRecordsListWidget extends StatelessWidget {
@@ -101,7 +100,8 @@ class TradingRecordsListWidget extends StatelessWidget {
               if (index % 2 == 0) {
                 return tradeCard(dailyTrades[index ~/ 2]);
               } else {
-                return const Divider(height: 1, thickness: 1, color: Color(0xffF0EDFD));
+                return const Divider(
+                    height: 1, thickness: 1, color: Color(0xffF0EDFD));
               }
             }),
           ],
@@ -113,25 +113,30 @@ class TradingRecordsListWidget extends StatelessWidget {
   Widget tradeCard(Trade trade) {
     // decision에 따른 색상 설정
     Color decisionColor;
+    Color reasonColor;
     if (trade.decision == 'buy') {
-      decisionColor = const Color(0xFFD7F8E4); 
+      decisionColor = const Color(0xFFD7F8E4);
+      reasonColor = const Color(0xFF4EC57E);
     } else if (trade.decision == 'sell') {
-      decisionColor = const Color(0xFFD7EDF8); 
+      decisionColor = const Color(0xFFD7EDF8);
+      reasonColor = Color.fromARGB(255, 85, 152, 224);
     } else if (trade.decision == 'hold') {
-      decisionColor = const Color(0xFFFFFACB); 
+      decisionColor = Color.fromARGB(255, 222, 224, 240);
+      reasonColor = const Color(0xFF808199);
     } else {
       decisionColor = Colors.grey; // 기본값
+      reasonColor = Colors.grey; // 기본값
     }
-    
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 24),
-      color: Colors.grey[200],
+      // color: Colors.grey[200],
       height: 65,
       child: Row(
         children: [
           // decision
           Container(
-            width: 65, 
+            width: 65,
             height: 65,
             decoration: BoxDecoration(
               color: decisionColor,
@@ -139,28 +144,58 @@ class TradingRecordsListWidget extends StatelessWidget {
             ),
             child: Image.asset('assets/${trade.decision}_img.png'),
           ),
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(trade.decision.toString(), style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),),
-                Text('↑ 1.287억', style: TextStyle(fontSize: 16, color: Color(0xff848484)),)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      trade.decision.toString(),
+                      style:
+                          TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                        child: Container(
+                            decoration: BoxDecoration(
+                              color: decisionColor,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10, top: 4, bottom: 2),
+                              child: Text(
+                                trade.reason.toString(), 
+                                style: TextStyle(color: reasonColor),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ))),
+                    const SizedBox(width: 18),
+                    Text(
+                      trade.getFormattedTime(),
+                      style: TextStyle(fontSize: 14, color: Color(0xff848484)),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '⇧ 1.287억',
+                      style: TextStyle(fontSize: 16, color: Color(0xff848484)),
+                    ),
+                    Text(
+                      '😄',
+                      style: TextStyle(fontSize: 24),
+                    )
+                  ],
+                )
               ],
             ),
           ),
-          Container(
-            height: 65,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(trade.getFormattedTime(), style: TextStyle(fontSize: 14, color: Color(0xff848484)),),
-                Text('😄', style:TextStyle(fontSize: 24),)
-              ],
-            ),
-          )
         ],
       ),
     );
