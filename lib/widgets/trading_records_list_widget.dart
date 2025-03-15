@@ -57,9 +57,7 @@ class TradingRecordsListWidget extends StatelessWidget {
           ),
           // 거래 내역 목록
           Expanded(
-            child: trades.isEmpty
-                ? _buildEmptyState()
-                : _buildTradesList(),
+            child: trades.isEmpty ? _buildEmptyState() : _buildTradesList(),
           ),
         ],
       ),
@@ -87,15 +85,15 @@ class TradingRecordsListWidget extends StatelessWidget {
     // 날짜별로 거래 내역 그룹화
     final groupedTrades = _groupTradesByDate();
     final dates = groupedTrades.keys.toList()..sort((a, b) => b.compareTo(a));
-    
+
     return ListView.builder(
       controller: scrollController,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(left: 30, right: 30),
       itemCount: dates.length,
       itemBuilder: (context, index) {
         final date = dates[index];
         final dailyTrades = groupedTrades[date]!;
-        
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -110,71 +108,92 @@ class TradingRecordsListWidget extends StatelessWidget {
                 ),
               ),
             ),
-            ...dailyTrades.map((trade) => Card(
-              margin: const EdgeInsets.only(bottom: 8),
-              elevation: 2,
-              child: ListTile(
-                leading: Icon(
-                  trade.decision == 'buy' ? Icons.arrow_downward : Icons.arrow_upward,
-                  color: trade.decision == 'buy' ? Colors.green : Colors.red,
-                ),
-                title: Text(
-                  trade.decision == 'buy' ? '매수' : '매도',
-                  style: TextStyle(
-                    color: trade.decision == 'buy' ? Colors.green : Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle: Text(
-                  '${NumberFormat('#,###').format(trade.price ?? 0)} 원',
-                ),
-                trailing: Text(
-                  trade.timestamp != null
-                      ? DateFormat('HH:mm').format(DateTime.parse(trade.timestamp!))
-                      : '',
-                ),
-                onTap: () {
-                  // 상세 페이지로 이동
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TradeDetailPage(trade: trade),
-                    ),
-                  );
-                },
-              ),
-            )),
+            ...List.generate(dailyTrades.length * 2 - 1, (index) {
+              // 짝수 인덱스는 tradeCard, 홀수 인덱스는 Divider
+              if (index % 2 == 0) {
+                return tradeCard(dailyTrades[index ~/ 2]);
+              } else {
+                return const Divider(height: 1, thickness: 1, color: Color(0xffF0EDFD));
+              }
+            }),
           ],
         );
       },
     );
   }
-  
+
+  Widget tradeCard(Trade trade) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 24),
+      color: Colors.red,
+      height: 65,
+      child: Row(
+        children: [
+          // decision
+          Container(
+            width: 65, 
+            height: 65,
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(24),
+            ),
+          ),
+          SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('sell'),
+                Text('^ 1.287억')
+              ],
+            ),
+          ),
+          Container(
+            height: 65,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text('오후 7:01'),
+                Text('😄', style:TextStyle(fontSize: 24),)
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   // 날짜별로 거래 내역 그룹화하는 함수
   Map<String, List<Trade>> _groupTradesByDate() {
     final groupedTrades = <String, List<Trade>>{};
     final now = DateTime.now();
-    
+
     for (var trade in trades) {
       if (trade.timestamp == null) continue;
-      
+
       final date = DateTime.parse(trade.timestamp!);
       String dateStr;
-      
-      if (date.year == now.year && date.month == now.month && date.day == now.day) {
+
+      if (date.year == now.year &&
+          date.month == now.month &&
+          date.day == now.day) {
         dateStr = '오늘';
-      } else if (date.year == now.year && date.month == now.month && date.day == now.day - 1) {
+      } else if (date.year == now.year &&
+          date.month == now.month &&
+          date.day == now.day - 1) {
         dateStr = '어제';
       } else {
         dateStr = DateFormat('yyyy년 M월 d일').format(date);
       }
-      
+
       if (!groupedTrades.containsKey(dateStr)) {
         groupedTrades[dateStr] = [];
       }
       groupedTrades[dateStr]!.add(trade);
     }
-    
+
     return groupedTrades;
   }
-} 
+}
