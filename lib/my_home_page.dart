@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; 
 import 'models/trade.dart';
-import 'widgets/trading_line_graph_widget.dart';
-import 'widgets/records_widget.dart';
 import 'widgets/custom_navigation_bar.dart';
 import 'pages/graph_page.dart';
 import 'pages/trades_page.dart';
