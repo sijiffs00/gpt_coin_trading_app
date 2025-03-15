@@ -19,8 +19,8 @@ class TradingRecordsListWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
+          topLeft: Radius.circular(42),
+          topRight: Radius.circular(42),
         ),
         boxShadow: [
           BoxShadow(
@@ -41,18 +41,6 @@ class TradingRecordsListWidget extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.grey[300],
               borderRadius: BorderRadius.circular(2.5),
-            ),
-          ),
-          // 제목 추가
-          const Padding(
-            padding: EdgeInsets.only(bottom: 8.0),
-            child: Text(
-              '거래 기록',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
             ),
           ),
           // 거래 내역 목록
@@ -102,9 +90,9 @@ class TradingRecordsListWidget extends StatelessWidget {
               child: Text(
                 date,
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black54,
+                  color: Color(0xff686767),
                 ),
               ),
             ),
@@ -123,9 +111,21 @@ class TradingRecordsListWidget extends StatelessWidget {
   }
 
   Widget tradeCard(Trade trade) {
+    // decision에 따른 색상 설정
+    Color decisionColor;
+    if (trade.decision == 'buy') {
+      decisionColor = const Color(0xFFD7F8E4); 
+    } else if (trade.decision == 'sell') {
+      decisionColor = const Color(0xFFD7EDF8); 
+    } else if (trade.decision == 'hold') {
+      decisionColor = const Color(0xFFFFFACB); 
+    } else {
+      decisionColor = Colors.grey; // 기본값
+    }
+    
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 24),
-      color: Colors.red,
+      color: Colors.grey[200],
       height: 65,
       child: Row(
         children: [
@@ -134,9 +134,10 @@ class TradingRecordsListWidget extends StatelessWidget {
             width: 65, 
             height: 65,
             decoration: BoxDecoration(
-              color: Colors.grey,
+              color: decisionColor,
               borderRadius: BorderRadius.circular(24),
             ),
+            child: Image.asset('assets/${trade.decision}_img.png'),
           ),
           SizedBox(width: 20),
           Expanded(
@@ -144,8 +145,8 @@ class TradingRecordsListWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('sell'),
-                Text('^ 1.287억')
+                Text(trade.decision.toString(), style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),),
+                Text('↑ 1.287억', style: TextStyle(fontSize: 16, color: Color(0xff848484)),)
               ],
             ),
           ),
@@ -155,7 +156,7 @@ class TradingRecordsListWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text('오후 7:01'),
+                Text(trade.getFormattedTime(), style: TextStyle(fontSize: 14, color: Color(0xff848484)),),
                 Text('😄', style:TextStyle(fontSize: 24),)
               ],
             ),

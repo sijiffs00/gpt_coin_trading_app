@@ -32,6 +32,26 @@ class Trade {
     );
   }
 
+  // timestamp를 '오전/오후 시:분' 형식으로 변환하는 메서드
+  String getFormattedTime() {
+    if (timestamp == null) return '';
+    
+    final dateTime = DateTime.parse(timestamp!);
+    final hour = dateTime.hour;
+    final minute = dateTime.minute;
+    
+    // 오전/오후 구분
+    final period = hour < 12 ? '오전' : '오후';
+    
+    // 12시간제로 변환
+    final hour12 = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
+    
+    // 분이 한 자리 수일 경우 앞에 0 추가
+    final minuteStr = minute < 10 ? '0$minute' : '$minute';
+    
+    return '$period $hour12:$minuteStr';
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
