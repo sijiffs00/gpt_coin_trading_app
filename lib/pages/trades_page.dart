@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 class TradesPage extends StatefulWidget {
   // trades 데이터를 받을 수 있도록 생성자 수정
   final List<Trade> trades;
-  
+
   // 지갑 정보 변수들 추가
   final double returnRate;
   final int seed;
@@ -15,7 +15,7 @@ class TradesPage extends StatefulWidget {
   final double krwBalance;
   final String lastUpdated;
   final bool isWalletLoading;
-  
+
   const TradesPage({
     super.key,
     required this.trades,
@@ -37,9 +37,21 @@ class _TradesPageState extends State<TradesPage> {
     return Scaffold(
       body: Stack(
         children: [
+          Container(
+                    decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFF9E7FE),  
+              Color(0xFFDAFCFC),  
+            ],
+          ),
+        ),
+          ),
           // 배경에 그래프 위젯 배치
           TradingLineGraphWidget(trades: widget.trades),
-          
+
           // 지갑 정보 위젯 추가
           // Positioned(
           //   top: 50,
@@ -47,7 +59,7 @@ class _TradesPageState extends State<TradesPage> {
           //   right: 20,
           //   child: _buildWalletInfoWidget(),
           // ),
-          
+
           // DraggableScrollableSheet로 스크롤 가능한 위젯 구현
           DraggableScrollableSheet(
             // 초기에는 화면의 절반만 차지
@@ -68,11 +80,11 @@ class _TradesPageState extends State<TradesPage> {
       ),
     );
   }
-  
+
   // 지갑 정보를 보여주는 위젯
   Widget _buildWalletInfoWidget() {
     final numberFormat = NumberFormat('#,###');
-    
+
     return Container(
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
@@ -81,7 +93,7 @@ class _TradesPageState extends State<TradesPage> {
           BoxShadow(
             color: Colors.grey.withOpacity(0.2),
             spreadRadius: 1,
-            blurRadius: 10, 
+            blurRadius: 10,
             offset: const Offset(0, 2),
           ),
         ],
