@@ -148,7 +148,32 @@ class TradingLineGraphWidget extends StatelessWidget {
                       barWidth: 3,
                       isStrokeCapRound: true,
                       dotData: FlDotData(
-                        show: false, // 점 숨기기
+                        show: true, // 점 보이기로 변경
+                        getDotPainter: (spot, percent, barData, index) {
+                          // decision에 따라 색상 결정
+                          Color dotColor;
+                          final trade = sortedTrades[index];
+                          switch (trade.decision) {
+                            case 'buy':
+                              dotColor = Colors.green;
+                              break;
+                            case 'sell':
+                              dotColor = Colors.blue;
+                              break;
+                            case 'hold':
+                              dotColor = Colors.grey;
+                              break;
+                            default:
+                              dotColor = Colors.grey;
+                          }
+                          
+                          return FlDotCirclePainter(
+                            radius: 3, // 점의 크기를 3으로 줄임
+                            color: dotColor.withOpacity(0.8), // decision에 따른 색상 적용
+                            strokeWidth: 0, // 테두리 제거
+                            strokeColor: Colors.transparent, // 테두리 색상 투명하게
+                          );
+                        },
                       ),
                       belowBarData: BarAreaData(
                         show: false,
