@@ -11,11 +11,40 @@ class TradingLineGraphWidget extends StatelessWidget {
     required this.trades,
   }) : super(key: key);
 
-  // 날짜 형식을 변환하는 함수 (02.28 -> 2.28)
+  // 날짜 형식을 변환하는 함수 (02.28 -> 2/28)
   String formatDateWithoutLeadingZeros(DateTime dateTime) {
     final month = dateTime.month.toString();
     final day = dateTime.day.toString();
-    return '$month.$day';
+    return '$month/$day';
+  }
+
+  // AM/PM 시간 형식으로 변환하는 함수
+  String formatAMPMTime(DateTime dateTime) {
+    final hour = dateTime.hour;
+    final minute = dateTime.minute;
+    final ampm = hour < 12 ? 'AM' : 'PM';
+    final hour12 = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
+    return '$ampm $hour12:$minute';
+  }
+
+  // decision에 따른 이모지와 텍스트를 반환하는 함수
+  String _getDecisionEmoji(String? decision) {
+    switch (decision) {
+      case 'buy':
+        return '💚 buy';
+      case 'sell':
+        return '💙 sell';
+      case 'hold':
+        return '🩶 hold';
+      default:
+        return '❓ unknown';
+    }
+  }
+
+  // BTC 가격을 억 단위로 변환하는 함수
+  String formatPriceInBillions(double? price) {
+    if (price == null) return '0 억';
+    return '${(price / 100000000).toStringAsFixed(3)} 억';
   }
 
   @override
@@ -151,8 +180,8 @@ class TradingLineGraphWidget extends StatelessWidget {
                         show: true, // 점 보이기로 변경
                         getDotPainter: (spot, percent, barData, index) {
                           // decision에 따라 색상 결정
-                          Color dotColor;
                           final trade = sortedTrades[index];
+                          Color dotColor;
                           switch (trade.decision) {
                             case 'buy':
                               dotColor = Colors.green;
@@ -166,12 +195,10 @@ class TradingLineGraphWidget extends StatelessWidget {
                             default:
                               dotColor = Colors.grey;
                           }
-                          
                           return FlDotCirclePainter(
-                            radius: 3, // 점의 크기를 3으로 줄임
-                            color: dotColor.withOpacity(0.8), // decision에 따른 색상 적용
-                            strokeWidth: 0, // 테두리 제거
-                            strokeColor: Colors.transparent, // 테두리 색상 투명하게
+                            radius: 3, // 점 크기
+                            color: dotColor.withOpacity(0.8),
+                            strokeWidth: 0,
                           );
                         },
                       ),
@@ -191,14 +218,14 @@ class TradingLineGraphWidget extends StatelessWidget {
                             if (trade.timestamp != null) {
                               final dateTime = DateTime.parse(trade.timestamp!);
                               final dateStr = formatDateWithoutLeadingZeros(dateTime);
-                              final timeStr = DateFormat('HH:mm').format(dateTime);
+                              final timeStr = formatAMPMTime(dateTime);
                               return LineTooltipItem(
-                                '$dateStr $timeStr\n${trade.getFormattedPrice()} BTC',
+                                '$dateStr $timeStr\n${formatPriceInBillions(trade.price)}\n${_getDecisionEmoji(trade.decision)}',
                                 const TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
                               );
                             }
                             return LineTooltipItem(
-                              '${trade.getFormattedPrice()} BTC',
+                              '${formatPriceInBillions(trade.price)}\n${_getDecisionEmoji(trade.decision)}',
                               const TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
                             );
                           }
@@ -207,6 +234,40 @@ class TradingLineGraphWidget extends StatelessWidget {
                       },
                     ),
                     handleBuiltInTouches: true,
+                    getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
+                      return spotIndexes.map((spotIndex) {
+                        final trade = sortedTrades[spotIndex];
+                        Color indicatorColor;
+                        switch (trade.decision) {
+                          case 'buy':
+                            indicatorColor = Colors.green;
+                            break;
+                          case 'sell':
+                            indicatorColor = Colors.blue;
+                            break;
+                          case 'hold':
+                            indicatorColor = Colors.grey;
+                            break;
+                          default:
+                            indicatorColor = Colors.grey;
+                        }
+                        return TouchedSpotIndicatorData(
+                          FlLine(
+                            color: indicatorColor.withOpacity(0.2),
+                            strokeWidth: 2,
+                          ),
+                          FlDotData(
+                            getDotPainter: (spot, percent, barData, index) {
+                              return FlDotCirclePainter(
+                                radius: 6,
+                                color: indicatorColor.withOpacity(0.8),
+                                strokeWidth: 0,
+                              );
+                            },
+                          ),
+                        );
+                      }).toList();
+                    },
                   ),
                 ),
               ),
