@@ -11,11 +11,18 @@ class TradingLineGraphWidget extends StatelessWidget {
     required this.trades,
   }) : super(key: key);
 
-  // 날짜 형식을 변환하는 함수 (02.28 -> 2/28)
-  String formatDateWithoutLeadingZeros(DateTime dateTime) {
+  // 날짜 형식을 변환하는 함수 (02.28 -> 2/28 또는 같은 월이면 28)
+  String formatDateWithoutLeadingZeros(DateTime dateTime, {DateTime? previousDate}) {
     final month = dateTime.month.toString();
     final day = dateTime.day.toString();
-    return '$month/$day';
+    
+    // 이전 날짜가 없거나 월이 다르면 월/일 형식으로 표시
+    if (previousDate == null || previousDate.month != dateTime.month) {
+      return '$month/$day';
+    } else {
+      // 같은 월이면 일만 표시
+      return day;
+    }
   }
 
   // AM/PM 시간 형식으로 변환하는 함수
@@ -139,7 +146,18 @@ class TradingLineGraphWidget extends StatelessWidget {
                           if (dateIndices.contains(index)) {
                             if (index >= 0 && index < sortedTrades.length && sortedTrades[index].timestamp != null) {
                               final dateTime = DateTime.parse(sortedTrades[index].timestamp!);
-                              final dateStr = formatDateWithoutLeadingZeros(dateTime);
+                              
+                              // 이전 날짜 찾기 (있는 경우)
+                              DateTime? previousDate;
+                              final previousIndex = dateIndices.indexOf(index) - 1;
+                              if (previousIndex >= 0 && previousIndex < dateIndices.length) {
+                                final prevTradeIndex = dateIndices[previousIndex];
+                                if (prevTradeIndex >= 0 && prevTradeIndex < sortedTrades.length && sortedTrades[prevTradeIndex].timestamp != null) {
+                                  previousDate = DateTime.parse(sortedTrades[prevTradeIndex].timestamp!);
+                                }
+                              }
+                              
+                              final dateStr = formatDateWithoutLeadingZeros(dateTime, previousDate: previousDate);
                               
                               return Padding(
                                 padding: const EdgeInsets.only(top: 8.0),
