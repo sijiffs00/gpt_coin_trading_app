@@ -68,47 +68,22 @@ flutter:
     - assets/    # 이렇게 하면 assets 폴더 안의 모든 파일을 자동으로 포함해줘!
     - assets/running_gom.gif
 
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
-
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
-
   fonts:
-    - family: Tenada
+    - family: NanumGothic
       fonts:
-        - asset: assets/fonts/Tenada.ttf
-    - family: GowunDodum
-      fonts:
-        - asset: assets/fonts/GowunDodum-Regular.ttf
-    - family: LINESeedKR
-      fonts:
-        - asset: assets/fonts/LINESeedKR-Th.ttf
-          weight: 100
-        - asset: assets/fonts/LINESeedKR-Rg.ttf
-          weight: 400
-        - asset: assets/fonts/LINESeedKR-Bd.ttf
+        - asset: assets/fonts/NanumGothic.ttf
+        - asset: assets/fonts/NanumGothicLight.ttf
+          weight: 300
+        - asset: assets/fonts/NanumGothicBold.ttf
           weight: 700
+        - asset: assets/fonts/NanumGothicExtraBold.ttf
+          weight: 800
+    - family: 온글잎박다현체
+      fonts:
+        - asset: assets/fonts/온글잎 박다현체.ttf
+    - family: OK GUNG
+      fonts:
+        - asset: assets/fonts/OK GUNG.ttf
 
 flutter_launcher_icons:
   android: "launcher_icon"
