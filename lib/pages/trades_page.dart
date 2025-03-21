@@ -37,16 +37,35 @@ class _TradesPageState extends State<TradesPage> {
     return Scaffold(
       body: Stack(
         children: [
+          
           Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
             child: Center(
               child: Opacity(
-                opacity: 0.5, // 50% 투명도 적용
-                child: Image.asset('assets/princess.png', fit: BoxFit.contain),
+                opacity: 0.5,
+                child: ClipRect(
+                  child: OverflowBox(
+                    maxWidth: double.infinity,
+                    maxHeight: double.infinity,
+                    child: FractionalTranslation(
+                      translation: Offset(0.1, 0.2), // 이미지를 x,y 좌표 기준으로 이동시킴
+                      child: Image.asset(
+                        'assets/princess.png',
+                        fit: BoxFit.none, // 이미지를 원본 크기로 유지
+                        alignment: Alignment.topLeft, // 이미지가 왼쪽 상단을 기준으로 정렬되도록 설정
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
           // 배경에 그래프 위젯 배치
           TradingLineGraphWidget(trades: widget.trades),
+
+
+          Text('공주라는걸\n잊지 않기_⭐️', style: TextStyle(fontSize: 50, fontFamily: '읏맨체', color: Color(0xccFF4AC1)),),
 
           // 지갑 정보 위젯 추가
           // Positioned(
