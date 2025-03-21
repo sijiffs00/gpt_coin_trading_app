@@ -7,7 +7,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'firebase_options.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'screens/loading_screen.dart';
 
 // 서버 주소 설정

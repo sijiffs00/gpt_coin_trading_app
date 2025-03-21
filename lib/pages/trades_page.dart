@@ -38,16 +38,12 @@ class _TradesPageState extends State<TradesPage> {
       body: Stack(
         children: [
           Container(
-                    decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFF9E7FE),  
-              Color(0xFFDAFCFC),  
-            ],
-          ),
-        ),
+            child: Center(
+              child: Opacity(
+                opacity: 0.5, // 50% 투명도 적용
+                child: Image.asset('assets/princess.png', fit: BoxFit.contain),
+              ),
+            ),
           ),
           // 배경에 그래프 위젯 배치
           TradingLineGraphWidget(trades: widget.trades),
