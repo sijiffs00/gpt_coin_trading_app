@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; 
 import 'models/trade.dart';
-import 'widgets/custom_navigation_bar.dart';
-import 'pages/graph_page.dart';
 import 'pages/trades_page.dart';
 import 'main.dart'; 
 
@@ -15,8 +13,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // 현재 선택된 탭 인덱스를 저장하는 변수
-  int _selectedIndex = 0;
   
   // 거래 데이터
   List<Trade> trades = [];
@@ -86,22 +82,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  // 탭 변경 시 호출되는 함수
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: CustomNavigationBar(
-        selectedIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
-      body: (_selectedIndex == 0) 
-          ? TradesPage(
+      body: TradesPage(
               trades: trades,
               returnRate: returnRate,
               seed: seed,
@@ -110,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
               lastUpdated: lastUpdated,
               isWalletLoading: isWalletLoading,
             ) 
-          : GraphPage(trades: trades),
+          
     );
   }
 }

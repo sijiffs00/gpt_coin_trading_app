@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/trade.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:intl/intl.dart';
 
 class TradingLineGraphWidget extends StatelessWidget {
   final List<Trade> trades;
