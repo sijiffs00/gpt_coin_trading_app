@@ -90,48 +90,39 @@ class TradingRecordsListWidget extends StatelessWidget {
                 date,
                 style: const TextStyle(
                   fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                  fontFamily: '나눔고딕체',
                   color: Color(0xff686767),
                 ),
               ),
             ),
-            ...List.generate(dailyTrades.length * 2 - 1, (index) {
-              // 짝수 인덱스는 tradeCard, 홀수 인덱스는 Divider
-              if (index % 2 == 0) {
-                return tradeCard(dailyTrades[index ~/ 2]);
-              } else {
-                return const Divider(
-                    height: 1, thickness: 1, color: Color(0xffF0EDFD));
+            ...dailyTrades.map((trade) {
+              // decision에 따라 다른 카드 위젯 반환
+              switch (trade.decision) {
+                case 'buy':
+                  return buyTradeCard(trade);
+                case 'sell':
+                  return sellTradeCard(trade);
+                case 'hold':
+                  return holdTradeCard(trade);
+                default:
+                  return buyTradeCard(trade); // 기본값
               }
-            }),
+            }).toList(),
           ],
         );
       },
     );
   }
 
-  Widget tradeCard(Trade trade) {
-    // decision에 따른 색상 설정
-    Color decisionColor;
-    Color reasonColor;
-    if (trade.decision == 'buy') {
-      decisionColor = const Color(0xFFD7F8E4);
-      reasonColor = const Color(0xFF4EC57E);
-    } else if (trade.decision == 'sell') {
-      decisionColor = const Color(0xFFD7EDF8);
-      reasonColor = Color.fromARGB(255, 85, 152, 224);
-    } else if (trade.decision == 'hold') {
-      decisionColor = Color.fromARGB(255, 222, 224, 240);
-      reasonColor = const Color(0xFF808199);
-    } else {
-      decisionColor = Colors.grey; // 기본값
-      reasonColor = Colors.grey; // 기본값
-    }
+  // Buy 결정에 대한 카드 위젯
+  Widget buyTradeCard(Trade trade) {
+    final decisionColor = const Color(0xFFD7F8E4);
+    final reasonColor = const Color(0xFF4EC57E);
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 24),
-      // color: Colors.grey[200],
-      height: 65,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      color: Colors.grey[200],
+      height: 91,
       child: Row(
         children: [
           // decision
@@ -142,7 +133,7 @@ class TradingRecordsListWidget extends StatelessWidget {
               color: decisionColor,
               borderRadius: BorderRadius.circular(24),
             ),
-            child: Image.asset('assets/${trade.decision}_img.png'),
+            child: Image.asset('assets/buy_img.png'),
           ),
           const SizedBox(width: 20),
           Expanded(
@@ -154,7 +145,7 @@ class TradingRecordsListWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      trade.decision.toString(),
+                      'buy',
                       style:
                           TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
                     ),
@@ -195,6 +186,118 @@ class TradingRecordsListWidget extends StatelessWidget {
                 )
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Sell 결정에 대한 카드 위젯
+  Widget sellTradeCard(Trade trade) {
+    final decisionColor = const Color(0xFFD7EDF8);
+    final reasonColor = Color.fromARGB(255, 85, 152, 224);
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      color: Colors.grey[200],
+      height: 91,
+      child: Row(
+        children: [
+          // decision
+          Container(
+            width: 65,
+            height: 65,
+            decoration: BoxDecoration(
+              color: decisionColor,
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Image.asset('assets/sell_img.png'),
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'sell',
+                      style:
+                          TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                        child: Container(
+                            decoration: BoxDecoration(
+                              color: decisionColor,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10, top: 4, bottom: 2),
+                              child: Text(
+                                trade.reason.toString(), 
+                                style: TextStyle(color: reasonColor),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ))),
+                    const SizedBox(width: 18),
+                    Text(
+                      trade.getFormattedTime(),
+                      style: TextStyle(fontSize: 14, color: Color(0xff848484)),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '⇧ ${trade.getFormattedPrice()} 억',
+                      style: TextStyle(fontSize: 16, color: Color(0xff848484)),
+                    ),
+                    Text(
+                      '😄',
+                      style: TextStyle(fontSize: 24),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Hold 결정에 대한 카드 위젯
+  Widget holdTradeCard(Trade trade) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      color: Colors.grey[200],
+      height: 91,
+      width: double.infinity,
+      child: Row(
+        children: [
+          // 왼쪽에 카드 이미지
+          Image.asset('assets/card_hold.png'),
+          
+          // 오른쪽에 말풍선 이미지와 텍스트
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Image.asset('assets/balloon_hold.png'),
+              Text(
+                '홀드',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff111111),
+                  fontFamily: '읏맨체'
+                ),
+              ),
+              
+            ],
           ),
         ],
       ),
