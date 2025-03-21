@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import '../models/trade.dart';
 import '../widgets/trading_line_graph_widget.dart';
 import '../widgets/trading_records_list_widget.dart';
-import '../widgets/wallet_info_widget.dart';
-import 'package:intl/intl.dart';
 
 class TradesPage extends StatefulWidget {
   // trades 데이터를 받을 수 있도록 생성자 수정
@@ -66,7 +64,7 @@ class _TradesPageState extends State<TradesPage> {
           TradingLineGraphWidget(trades: widget.trades),
 
 
-          Text('공주라는걸\n잊지 않기_⭐️', style: TextStyle(fontSize: 50, fontFamily: '읏맨체', color: Color(0xccFF4AC1)),),
+          const Text('공주라는걸\n잊지 않기_⭐️', style: TextStyle(fontSize: 50, fontFamily: '읏맨체', color: Color(0xccFF4AC1)),),
 
           // 지갑 정보 위젯
           // Positioned(
@@ -93,9 +91,23 @@ class _TradesPageState extends State<TradesPage> {
             maxChildSize: 0.9,
             // 스크롤 컨트롤러 생성
             builder: (BuildContext context, ScrollController scrollController) {
-              return TradingRecordsListWidget(
-                trades: widget.trades,
-                scrollController: scrollController,
+              return Container(
+                decoration:const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(42)),
+                  boxShadow: [
+                    BoxShadow(
+                      offset: Offset(0, -10),
+                      blurRadius: 20,
+                      spreadRadius: 0,
+                      color: Color(0x0F000000), // 6% 투명도의 검정색
+                    ),
+                  ],
+                ),
+                child: TradingRecordsListWidget(
+                  trades: widget.trades,
+                  scrollController: scrollController,
+                ),
               );
             },
           ),
