@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/trade.dart';
 import '../widgets/trading_line_graph_widget.dart';
 import '../widgets/trading_records_list_widget.dart';
+import '../widgets/wallet_info_widget.dart';
 import 'package:intl/intl.dart';
 
 class TradesPage extends StatefulWidget {
@@ -67,12 +68,19 @@ class _TradesPageState extends State<TradesPage> {
 
           Text('공주라는걸\n잊지 않기_⭐️', style: TextStyle(fontSize: 50, fontFamily: '읏맨체', color: Color(0xccFF4AC1)),),
 
-          // 지갑 정보 위젯 추가
+          // 지갑 정보 위젯
           // Positioned(
           //   top: 50,
           //   left: 20,
           //   right: 20,
-          //   child: _buildWalletInfoWidget(),
+          //   child: WalletInfoWidget(
+          //     returnRate: widget.returnRate,
+          //     seed: widget.seed,
+          //     btcBalance: widget.btcBalance,
+          //     krwBalance: widget.krwBalance,
+          //     lastUpdated: widget.lastUpdated,
+          //     isLoading: widget.isWalletLoading,
+          //   ),
           // ),
 
           // DraggableScrollableSheet로 스크롤 가능한 위젯 구현
@@ -96,47 +104,5 @@ class _TradesPageState extends State<TradesPage> {
     );
   }
 
-  // 지갑 정보를 보여주는 위젯
-  Widget _buildWalletInfoWidget() {
-    final numberFormat = NumberFormat('#,###');
-
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 1,
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-        color: Colors.white,
-      ),
-      child: widget.isWalletLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '👛 내 지갑',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text('수익률: ${widget.returnRate.toStringAsFixed(2)}%'),
-                  Text('시드머니: ${numberFormat.format(widget.seed)}원'),
-                  Text('BTC 잔액: ${widget.btcBalance.toStringAsFixed(8)} BTC'),
-                  Text('원화 잔액: ${numberFormat.format(widget.krwBalance)}원'),
-                  Text('마지막 업데이트: ${widget.lastUpdated}'),
-                ],
-              ),
-            ),
-    );
-  }
+  
 }
