@@ -69,7 +69,7 @@ flutter:
     - assets/running_gom.gif
 
   fonts:
-    - family: NanumGothic
+    - family: 나눔고딕체
       fonts:
         - asset: assets/fonts/NanumGothic.ttf
         - asset: assets/fonts/NanumGothicLight.ttf
@@ -78,10 +78,10 @@ flutter:
           weight: 700
         - asset: assets/fonts/NanumGothicExtraBold.ttf
           weight: 800
-    - family: 온글잎박다현체
+    - family: 박다현체
       fonts:
         - asset: assets/fonts/온글잎 박다현체.ttf
-    - family: OK GUNG
+    - family: 읏맨체
       fonts:
         - asset: assets/fonts/OK GUNG.ttf
 

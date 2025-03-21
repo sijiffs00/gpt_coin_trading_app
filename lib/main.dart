@@ -44,11 +44,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
-        useMaterial3: true,
-        fontFamily: 'NanumGothic',  // 앱 전체 기본 폰트로 설정
-      ),
+      // theme: ThemeData(
+      //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
+      //   useMaterial3: true,
+      //   fontFamily: '읏맨체',  // 앱 전체 기본 폰트
+      // ),
       home: FutureBuilder(
         future: _initializeApp(),
         builder: (context, snapshot) {
