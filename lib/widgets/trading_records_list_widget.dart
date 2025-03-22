@@ -274,29 +274,34 @@ class TradingRecordsListWidget extends StatelessWidget {
   Widget holdTradeCard(Trade trade) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
-      color: Colors.grey[200],
       height: 91,
       width: double.infinity,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/back_hold.JPG'),
+          fit: BoxFit.cover,
+        ),
+      ),
       child: Row(
         children: [
-          // 왼쪽에 카드 이미지
           Image.asset('assets/card_hold.png'),
           
-          // 오른쪽에 말풍선 이미지와 텍스트
           Stack(
-            alignment: Alignment.center,
             children: [
               Image.asset('assets/balloon_hold.png'),
-              Text(
-                '홀드',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff111111),
-                  fontFamily: '읏맨체'
+              Positioned(
+                top: 15,
+                left: 22,
+                child: Text(
+                  '홀드',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff111111),
+                    fontFamily: '읏맨체'
+                  ),
                 ),
               ),
-              
             ],
           ),
         ],
