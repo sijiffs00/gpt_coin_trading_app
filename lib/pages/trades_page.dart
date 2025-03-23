@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gpt_coin_trading/widgets/wallet_info_widget.dart';
 import '../models/trade.dart';
 import '../widgets/trading_line_graph_widget.dart';
 import '../widgets/trading_records_list_widget.dart';
-
+import 'package:animated_background/animated_background.dart';
 class TradesPage extends StatefulWidget {
   // trades 데이터를 받을 수 있도록 생성자 수정
   final List<Trade> trades;
@@ -30,56 +31,56 @@ class TradesPage extends StatefulWidget {
   State<TradesPage> createState() => _TradesPageState();
 }
 
-class _TradesPageState extends State<TradesPage> {
+class _TradesPageState extends State<TradesPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffF8E0EB),
       body: Stack(
         children: [
-          
+        
+
           Container(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Center(
-              child: Opacity(
-                opacity: 0.5,
-                child: ClipRect(
-                  child: OverflowBox(
-                    maxWidth: double.infinity,
-                    maxHeight: double.infinity,
-                    child: FractionalTranslation(
-                      translation: Offset(0.1, 0.2), // 이미지를 x,y 좌표 기준으로 이동시킴
-                      child: Image.asset(
-                        'assets/princess.png',
-                        fit: BoxFit.none, // 이미지를 원본 크기로 유지
-                        alignment: Alignment.topLeft, // 이미지가 왼쪽 상단을 기준으로 정렬되도록 설정
-                      ),
-                    ),
-                  ),
-                ),
+            child: AnimatedBackground(
+              behaviour: RandomParticleBehaviour(
+                options: const ParticleOptions(
+                  spawnMaxRadius: 40,
+                  spawnMinSpeed: 15,
+                  particleCount: 80,
+                  spawnMaxSpeed: 50,
+                  spawnOpacity: 0.2,
+                  baseColor: Colors.pink,
+                  
+                )
               ),
-            ),
+              child: Center(child: Text('공주라는걸 잊지않기'),),
+              vsync: this,)
           ),
+
+
+
+
           // 배경에 그래프 위젯 배치
           TradingLineGraphWidget(trades: widget.trades),
 
 
-          const Text('공주라는걸\n잊지 않기_⭐️', style: TextStyle(fontSize: 50, fontFamily: '읏맨체', color: Color(0xccFF4AC1)),),
+          // const Text('공주라는걸\n잊지 않기_⭐️', style: TextStyle(fontSize: 50, fontFamily: '읏맨체', color: Color(0xccFF4AC1)),),
 
           // 지갑 정보 위젯
-          // Positioned(
-          //   top: 50,
-          //   left: 20,
-          //   right: 20,
-          //   child: WalletInfoWidget(
-          //     returnRate: widget.returnRate,
-          //     seed: widget.seed,
-          //     btcBalance: widget.btcBalance,
-          //     krwBalance: widget.krwBalance,
-          //     lastUpdated: widget.lastUpdated,
-          //     isLoading: widget.isWalletLoading,
-          //   ),
-          // ),
+          Positioned(
+            bottom: 200,
+            left: 20,
+            right: 20,
+            child: WalletInfoWidget(
+              returnRate: widget.returnRate,
+              seed: widget.seed,
+              btcBalance: widget.btcBalance,
+              krwBalance: widget.krwBalance,
+              lastUpdated: widget.lastUpdated,
+              isLoading: widget.isWalletLoading,
+            ),
+          ),
 
           // DraggableScrollableSheet로 스크롤 가능한 위젯 구현
           DraggableScrollableSheet(
