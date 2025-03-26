@@ -116,154 +116,73 @@ class TradingRecordsListWidget extends StatelessWidget {
 
   // Buy 결정에 대한 카드 위젯
   Widget buyTradeCard(Trade trade) {
-    final decisionColor = const Color(0xFFD7F8E4);
-    final reasonColor = const Color(0xFF4EC57E);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
-      color: Colors.grey[200],
       height: 91,
-      child: Row(
+      width: double.infinity,
+      decoration:const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/background/buy.JPG'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child:  Stack(
+        alignment: Alignment.center,
         children: [
-          // decision
-          Container(
-            width: 65,
-            height: 65,
-            decoration: BoxDecoration(
-              color: decisionColor,
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Image.asset('assets/buy_img.png'),
-          ),
-          const SizedBox(width: 20),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'buy',
-                      style:
-                          TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                        child: Container(
-                            decoration: BoxDecoration(
-                              color: decisionColor,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10, top: 4, bottom: 2),
-                              child: Text(
-                                trade.reason.toString(), 
-                                style: TextStyle(color: reasonColor),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ))),
-                    const SizedBox(width: 18),
-                    Text(
-                      trade.getFormattedTime(),
-                      style: TextStyle(fontSize: 14, color: Color(0xff848484)),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '⇧ ${trade.getFormattedPrice()} 억',
-                      style: TextStyle(fontSize: 16, color: Color(0xff848484)),
-                    ),
-                    Text(
-                      '😄',
-                      style: TextStyle(fontSize: 24),
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
+          Image.asset('assets/balloon_buy.png', width: 220, height: 108,fit: BoxFit.cover,),
+          const Text('사야지',
+          style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff111111),
+                      fontFamily: '읏맨체'),
+          )
         ],
       ),
+      
+     
+      
     );
   }
 
   // Sell 결정에 대한 카드 위젯
   Widget sellTradeCard(Trade trade) {
-    final decisionColor = const Color(0xFFD7EDF8);
-    final reasonColor = Color.fromARGB(255, 85, 152, 224);
-
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
-      color: Colors.grey[200],
       height: 91,
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/background/sell.JPG'),
+          fit: BoxFit.cover,
+        ),
+      ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          // decision
-          Container(
-            width: 65,
-            height: 65,
-            decoration: BoxDecoration(
-              color: decisionColor,
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Image.asset('assets/sell_img.png'),
-          ),
-          const SizedBox(width: 20),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'sell',
-                      style:
-                          TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                        child: Container(
-                            decoration: BoxDecoration(
-                              color: decisionColor,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10, top: 4, bottom: 2),
-                              child: Text(
-                                trade.reason.toString(), 
-                                style: TextStyle(color: reasonColor),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ))),
-                    const SizedBox(width: 18),
-                    Text(
-                      trade.getFormattedTime(),
-                      style: TextStyle(fontSize: 14, color: Color(0xff848484)),
-                    ),
-                  ],
+          Stack(
+            children: [
+              Image.asset('assets/balloon_sell.png'),
+              const Positioned(
+                top: 18,
+                left: 35,
+                child: Text(
+                  '던져',
+                  style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff111111),
+                      fontFamily: '읏맨체'),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '⇧ ${trade.getFormattedPrice()} 억',
-                      style: TextStyle(fontSize: 16, color: Color(0xff848484)),
-                    ),
-                    Text(
-                      '😄',
-                      style: TextStyle(fontSize: 24),
-                    )
-                  ],
-                )
-              ],
-            ),
+              ),
+             
+            ],
+          ),
+          Image.asset(
+            'assets/card_sell.png',
+            height: 91,
+            fit: BoxFit.contain,
           ),
         ],
       ),
@@ -278,14 +197,13 @@ class TradingRecordsListWidget extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/back_hold.JPG'),
+          image: AssetImage('assets/background/hold.JPG'),
           fit: BoxFit.cover,
         ),
       ),
       child: Row(
         children: [
           Image.asset('assets/card_hold.png'),
-          
           Stack(
             children: [
               Image.asset('assets/balloon_hold.png'),
@@ -295,11 +213,10 @@ class TradingRecordsListWidget extends StatelessWidget {
                 child: Text(
                   '홀드',
                   style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xff111111),
-                    fontFamily: '읏맨체'
-                  ),
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff111111),
+                      fontFamily: '읏맨체'),
                 ),
               ),
             ],
