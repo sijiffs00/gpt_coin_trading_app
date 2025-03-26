@@ -7,6 +7,8 @@ class Trade {
   final String? reason;
   final String? original_reason;
   final String? lookback;
+  final double? amount;  // BTC 수량
+  final double? total;   // 총 거래 금액
 
   Trade({
     this.id,
@@ -17,6 +19,8 @@ class Trade {
     this.reason,
     this.original_reason,
     this.lookback,
+    this.amount,
+    this.total,
   });
 
   factory Trade.fromJson(Map<String, dynamic> json) {
@@ -29,6 +33,8 @@ class Trade {
       reason: json['reason'] as String?,
       original_reason: json['original_reason'] as String?,
       lookback: json['lookback'] as String?,
+      amount: json['amount'] != null ? (json['amount'] as num).toDouble() : null,
+      total: json['total'] != null ? (json['total'] as num).toDouble() : null,
     );
   }
 
@@ -71,6 +77,8 @@ class Trade {
       'reason': reason,
       'original_reason': original_reason,
       'lookback': lookback,
+      'amount': amount,
+      'total': total,
     };
   }
 } 
