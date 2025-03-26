@@ -93,14 +93,39 @@ class TradingLineGraphWidget extends StatelessWidget {
     }
 
     // 날짜 표시를 위한 준비
-    // 각 날짜별 첫 번째 인덱스를 저장
     final Map<String, int> dateFirstIndices = {};
     for (int i = 0; i < sortedTrades.length; i++) {
       if (sortedTrades[i].timestamp != null) {
         final dateTime = DateTime.parse(sortedTrades[i].timestamp!);
         final dateStr = formatDateWithoutLeadingZeros(dateTime);
+        
+        // 같은 달의 날짜는 5일 간격으로만 표시
         if (!dateFirstIndices.containsKey(dateStr)) {
-          dateFirstIndices[dateStr] = i;
+          // 이전 날짜가 있는지 확인
+          if (dateFirstIndices.isNotEmpty) {
+            final lastIndex = dateFirstIndices.values.last;
+            if (lastIndex < sortedTrades.length && sortedTrades[lastIndex].timestamp != null) {
+              final lastDateTime = DateTime.parse(sortedTrades[lastIndex].timestamp!);
+              
+              // 같은 달인 경우
+              if (lastDateTime.month == dateTime.month) {
+                // 5일 간격으로만 표시하거나 오늘 날짜인 경우
+                final now = DateTime.now();
+                if (dateTime.day % 5 == 0 || 
+                    (dateTime.year == now.year && 
+                     dateTime.month == now.month && 
+                     dateTime.day == now.day)) {
+                  dateFirstIndices[dateStr] = i;
+                }
+              } else {
+                // 다른 달이면 첫 날짜는 무조건 표시
+                dateFirstIndices[dateStr] = i;
+              }
+            }
+          } else {
+            // 첫 날짜는 무조건 표시
+            dateFirstIndices[dateStr] = i;
+          }
         }
       }
     }
