@@ -35,7 +35,7 @@ class _TradesPageState extends State<TradesPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffF8E0EB),
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
         
@@ -44,17 +44,17 @@ class _TradesPageState extends State<TradesPage> with TickerProviderStateMixin {
             width: MediaQuery.of(context).size.width,
             child: AnimatedBackground(
               behaviour: RandomParticleBehaviour(
-                options: const ParticleOptions(
+                options: ParticleOptions(
                   spawnMaxRadius: 40,
                   spawnMinSpeed: 15,
-                  particleCount: 80,
+                  particleCount: 20,
                   spawnMaxSpeed: 50,
                   spawnOpacity: 0.2,
-                  baseColor: Colors.pink,
-                  
+                  baseColor: Colors.blue,
+                  image: Image.asset('assets/icons/money.png'),
                 )
               ),
-              child: Center(child: Text('공주라는걸 잊지않기'),),
+              child: Center(child: Text(''),),
               vsync: this,)
           ),
 
