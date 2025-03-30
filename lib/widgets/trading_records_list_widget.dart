@@ -122,6 +122,17 @@ class _TradingRecordsListWidgetState extends State<TradingRecordsListWidget> {
 
   // Buy 결정에 대한 카드 위젯
   Widget buyTradeCard(Trade trade) {
+    // 거래 시간 포맷팅
+    String formattedTime = '';
+    if (trade.timestamp != null) {
+      final dateTime = DateTime.parse(trade.timestamp!);
+      final hour = dateTime.hour;
+      final minute = dateTime.minute;
+      final ampm = hour < 12 ? 'AM' : 'PM';
+      final hour12 = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
+      formattedTime = '$ampm $hour12:${minute.toString().padLeft(2, '0')}';
+    }
+
     return GestureDetector(
       onTap: () => _showTradeDetail(context, trade),
       child: Container(
@@ -134,17 +145,35 @@ class _TradingRecordsListWidgetState extends State<TradingRecordsListWidget> {
             fit: BoxFit.cover,
           ),
         ),
-        child:  Stack(
+        child: Stack(
           alignment: Alignment.center,
           children: [
             Image.asset('assets/balloon_buy.png', width: 220, height: 108,fit: BoxFit.cover,),
             const Text('사야지',
-            style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff111111),
-                        fontFamily: '읏맨체'),
-            )
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Color(0xff111111),
+                fontFamily: '읏맨체'
+              ),
+            ),
+            // 시간 표시
+            Positioned(
+              left: 0,
+              bottom: 0,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10, bottom: 5),
+                child: Text(
+                  formattedTime,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Color(0xff111111),
+                    fontWeight: FontWeight.w500,
+                    fontFamily: '읏맨체',
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -153,6 +182,17 @@ class _TradingRecordsListWidgetState extends State<TradingRecordsListWidget> {
 
   // Sell 결정에 대한 카드 위젯
   Widget sellTradeCard(Trade trade) {
+    // 거래 시간 포맷팅
+    String formattedTime = '';
+    if (trade.timestamp != null) {
+      final dateTime = DateTime.parse(trade.timestamp!);
+      final hour = dateTime.hour;
+      final minute = dateTime.minute;
+      final ampm = hour < 12 ? 'AM' : 'PM';
+      final hour12 = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
+      formattedTime = '$ampm $hour12:${minute.toString().padLeft(2, '0')}';
+    }
+
     return GestureDetector(
       onTap: () => _showTradeDetail(context, trade),
       child: Container(
@@ -165,30 +205,51 @@ class _TradingRecordsListWidgetState extends State<TradingRecordsListWidget> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+        child: Stack(
           children: [
-            Stack(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Image.asset('assets/balloon_sell.png'),
-                const Positioned(
-                  top: 18,
-                  left: 35,
-                  child: Text(
-                    '던져',
-                    style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff111111),
-                        fontFamily: '읏맨체'),
-                  ),
+                Stack(
+                  children: [
+                    Image.asset('assets/balloon_sell.png'),
+                    const Positioned(
+                      top: 18,
+                      left: 35,
+                      child: Text(
+                        '던져',
+                        style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff111111),
+                            fontFamily: '읏맨체'),
+                      ),
+                    ),
+                  ],
+                ),
+                Image.asset(
+                  'assets/card_sell.png',
+                  height: 91,
+                  fit: BoxFit.contain,
                 ),
               ],
             ),
-            Image.asset(
-              'assets/card_sell.png',
-              height: 91,
-              fit: BoxFit.contain,
+            // 시간 표시
+            Positioned(
+              left: 0,
+              bottom: 0,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10, bottom: 5),
+                child: Text(
+                  formattedTime,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Color(0xff111111),
+                    fontWeight: FontWeight.w500,
+                    fontFamily: '읏맨체',
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -198,6 +259,17 @@ class _TradingRecordsListWidgetState extends State<TradingRecordsListWidget> {
 
   // Hold 결정에 대한 카드 위젯
   Widget holdTradeCard(Trade trade) {
+    // 거래 시간 포맷팅
+    String formattedTime = '';
+    if (trade.timestamp != null) {
+      final dateTime = DateTime.parse(trade.timestamp!);
+      final hour = dateTime.hour;
+      final minute = dateTime.minute;
+      final ampm = hour < 12 ? 'AM' : 'PM';
+      final hour12 = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
+      formattedTime = '$ampm $hour12:${minute.toString().padLeft(2, '0')}';
+    }
+
     return GestureDetector(
       onTap: () => _showTradeDetail(context, trade),
       child: Container(
@@ -210,25 +282,46 @@ class _TradingRecordsListWidgetState extends State<TradingRecordsListWidget> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Row(
+        child: Stack(
           children: [
-            Image.asset('assets/card_hold.png'),
-            Stack(
+            Row(
               children: [
-                Image.asset('assets/balloon_hold.png'),
-                Positioned(
-                  top: 15,
-                  left: 22,
-                  child: Text(
-                    '홀드',
-                    style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff111111),
-                        fontFamily: '읏맨체'),
-                  ),
+                Image.asset('assets/card_hold.png'),
+                Stack(
+                  children: [
+                    Image.asset('assets/balloon_hold.png'),
+                    Positioned(
+                      top: 15,
+                      left: 22,
+                      child: Text(
+                        '홀드',
+                        style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff111111),
+                            fontFamily: '읏맨체'),
+                      ),
+                    ),
+                  ],
                 ),
               ],
+            ),
+            // 시간 표시
+            Positioned(
+              right: 0,
+              bottom: 0,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 10, bottom: 5),
+                child: Text(
+                  formattedTime,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: '읏맨체',
+                  ),
+                ),
+              ),
             ),
           ],
         ),
