@@ -17,7 +17,7 @@ class TradingLineGraphWidget extends StatelessWidget {
     
     // 이전 날짜가 없거나 월이 다르면 월/일 형식으로 표시
     if (previousDate == null || previousDate.month != dateTime.month) {
-      return '$month/$day';
+      return '$day\n$month';  // 순서 변경: day가 위로, month가 아래로
     } else {
       // 같은 월이면 일만 표시
       return day;
@@ -161,7 +161,7 @@ class TradingLineGraphWidget extends StatelessWidget {
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
-                        reservedSize: 25,
+                        reservedSize: 35,
                         interval: 1, // 모든 눈금에 대해 체크
                         getTitlesWidget: (value, meta) {
                           final int index = value.toInt();
@@ -187,10 +187,12 @@ class TradingLineGraphWidget extends StatelessWidget {
                                 padding: const EdgeInsets.only(top: 8.0),
                                 child: Text(
                                   dateStr,
+                                  textAlign: TextAlign.center,  // 중앙 정렬 추가
                                   style: const TextStyle(
                                     color: Colors.black87,
                                     fontSize: 11,
                                     fontWeight: FontWeight.bold,
+                                    height: 1.2,  // 줄 간격 조정
                                   ),
                                 ),
                               );
