@@ -13,7 +13,7 @@
 ## 주요 기능
 
 ### 1. 실시간 차트와 투자 현황
-<img src="assets/screenshots/메인화면1.png" width="300">
+<img src="assets/screenshots/메인화면1.png" width="200">
 
 - 비트코인 가격 변화를 실시간으로 확인하세요
 - 투자 상태(매수/매도/홀드)를 한눈에 볼 수 있어요
@@ -22,9 +22,9 @@
 ### 2. 똑똑한 AI 투자 분석
 <table>
   <tr>
-    <td><img src="assets/screenshots/매매기록상세보기_1.PNG" width="250"></td>
-    <td><img src="assets/screenshots/매매기록상세보기_2.PNG" width="250"></td>
-    <td><img src="assets/screenshots/매매기록상세보기_3.PNG" width="250"></td>
+    <td><img src="assets/screenshots/매매기록상세보기_1.PNG" width="200"></td>
+    <td><img src="assets/screenshots/매매기록상세보기_2.PNG" width="200"></td>
+    <td><img src="assets/screenshots/매매기록상세보기_3.PNG" width="200"></td>
   </tr>
 </table>
 
@@ -33,7 +33,7 @@
 - 투자 근거를 한글로 자세히 알려드려요
 
 ### 3. 실시간 투자 알림
-<img src="assets/screenshots/푸시알림.PNG" width="300">
+<img src="assets/screenshots/푸시알림.PNG" width="220">
 
 - 매 시간 투자 분석 결과를 알림으로 받아보세요
 - 매수/매도 시점을 놓치지 않도록 알려드려요
