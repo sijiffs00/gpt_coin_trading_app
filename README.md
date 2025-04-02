@@ -1,6 +1,8 @@
 # 공주의 코인 👑
 
+<p align="center">
 <img src="assets/screenshots/로딩화면.png" width="200">
+</p>
 
 당신의 비트코인 투자를 책임질 귀여운 AI 투자 도우미 🐵
 
@@ -13,27 +15,33 @@
 ## 주요 기능
 
 ### 1. 실시간 차트와 투자 현황
+<p align="center">
 <img src="assets/screenshots/메인화면1.png" width="200">
+</p>
 
 - 비트코인 가격 변화를 실시간으로 확인하세요
 - 투자 상태(매수/매도/홀드)를 한눈에 볼 수 있어요
 - 시간대별 투자 기록을 확인할 수 있어요
 
 ### 2. 똑똑한 AI 투자 분석
-<table>
+<p align="center">
+<table align="center">
   <tr>
     <td><img src="assets/screenshots/매매기록상세보기_1.PNG" width="200"></td>
     <td><img src="assets/screenshots/매매기록상세보기_2.PNG" width="200"></td>
     <td><img src="assets/screenshots/매매기록상세보기_3.PNG" width="200"></td>
   </tr>
 </table>
+</p>
 
 - AI가 자동으로 매수/매도 시점을 찾아드려요
 - RSI, MACD 등 복잡한 지표를 쉽게 설명해드려요
 - 투자 근거를 한글로 자세히 알려드려요
 
 ### 3. 실시간 투자 알림
+<p align="center">
 <img src="assets/screenshots/푸시알림.PNG" width="220">
+</p>
 
 - 매 시간 투자 분석 결과를 알림으로 받아보세요
 - 매수/매도 시점을 놓치지 않도록 알려드려요
