@@ -7,9 +7,7 @@
 당신의 비트코인 투자를 책임질 귀여운 AI 투자 도우미 🐵
 
 ## 앱 시연 영상
-<p align="center">
-<video src="assets/screenshots/작동영상.MP4" width="300" />
-</p>
+https://github.com/sojung/gpt_coin_trading/assets/screenshots/작동영상.MP4
 
 ## 이런 분들을 위한 앱이에요!
 
