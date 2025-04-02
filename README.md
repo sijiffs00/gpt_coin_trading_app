@@ -1,16 +1,52 @@
-# gpt_coin_trading
+# 공주의 코인 👑
 
-A new Flutter project.
+![로고](assets/screenshots/로딩화면.png)
 
-## Getting Started
+당신의 비트코인 투자를 책임질 귀여운 AI 투자 도우미 🐵
 
-This project is a starting point for a Flutter application.
+## 이런 분들을 위한 앱이에요!
 
-A few resources to get you started if this is your first Flutter project:
+- 비트코인 투자는 하고 싶은데 어려우신 분
+- 24시간 차트를 보기 힘드신 분
+- AI의 도움을 받아 투자하고 싶으신 분
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 주요 기능
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 1. 실시간 차트와 투자 현황
+<img src="assets/screenshots/메인화면1.png" width="300">
+
+- 비트코인 가격 변화를 실시간으로 확인하세요
+- 투자 상태(매수/매도/홀드)를 한눈에 볼 수 있어요
+- 시간대별 투자 기록을 확인할 수 있어요
+
+### 2. 똑똑한 AI 투자 분석
+<img src="assets/screenshots/매매기록상세보기_1.PNG" width="300">
+
+- AI가 자동으로 매수/매도 시점을 찾아드려요
+- RSI, MACD 등 복잡한 지표를 쉽게 설명해드려요
+- 투자 근거를 한글로 자세히 알려드려요
+
+### 3. 실시간 투자 알림
+<img src="assets/screenshots/푸시알림.PNG" width="300">
+
+- 매 시간 투자 분석 결과를 알림으로 받아보세요
+- 매수/매도 시점을 놓치지 않도록 알려드려요
+- 투자 성과를 실시간으로 확인하세요
+
+## 시작하기
+
+1. App Store 또는 Google Play에서 '공주의 코인'을 다운로드하세요
+2. 앱을 실행하면 자동으로 AI 분석이 시작됩니다
+3. 매 시간 투자 알림을 받아보세요!
+
+## 주의사항
+
+- 이 앱은 투자 참고용으로만 사용해주세요
+- 실제 투자는 본인 판단하에 진행해주세요
+- 가상화폐 투자에는 위험이 따를 수 있습니다
+
+## 문의하기
+
+앱 사용 중 궁금한 점이 있으시다면 언제든 문의해주세요!
+- 이메일: princess@coin.com
+- 인스타그램: @princess_coin
