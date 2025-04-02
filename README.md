@@ -20,7 +20,13 @@
 - 시간대별 투자 기록을 확인할 수 있어요
 
 ### 2. 똑똑한 AI 투자 분석
-<img src="assets/screenshots/매매기록상세보기_1.PNG" width="300">
+<table>
+  <tr>
+    <td><img src="assets/screenshots/매매기록상세보기_1.PNG" width="250"></td>
+    <td><img src="assets/screenshots/매매기록상세보기_2.PNG" width="250"></td>
+    <td><img src="assets/screenshots/매매기록상세보기_3.PNG" width="250"></td>
+  </tr>
+</table>
 
 - AI가 자동으로 매수/매도 시점을 찾아드려요
 - RSI, MACD 등 복잡한 지표를 쉽게 설명해드려요
@@ -33,20 +39,9 @@
 - 매수/매도 시점을 놓치지 않도록 알려드려요
 - 투자 성과를 실시간으로 확인하세요
 
-## 시작하기
-
-1. App Store 또는 Google Play에서 '공주의 코인'을 다운로드하세요
-2. 앱을 실행하면 자동으로 AI 분석이 시작됩니다
-3. 매 시간 투자 알림을 받아보세요!
-
 ## 주의사항
 
 - 이 앱은 투자 참고용으로만 사용해주세요
 - 실제 투자는 본인 판단하에 진행해주세요
 - 가상화폐 투자에는 위험이 따를 수 있습니다
 
-## 문의하기
-
-앱 사용 중 궁금한 점이 있으시다면 언제든 문의해주세요!
-- 이메일: princess@coin.com
-- 인스타그램: @princess_coin
