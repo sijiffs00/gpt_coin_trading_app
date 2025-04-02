@@ -1,6 +1,6 @@
 # 공주의 코인 👑
 
-![로고](assets/screenshots/로딩화면.png)
+<img src="assets/screenshots/로딩화면.png" width="200">
 
 당신의 비트코인 투자를 책임질 귀여운 AI 투자 도우미 🐵
 
