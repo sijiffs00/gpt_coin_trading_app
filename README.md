@@ -4,29 +4,27 @@
 <img src="assets/screenshots/로딩화면.png" width="200">
 </p>
 
-당신의 비트코인 투자를 책임질 귀여운 AI 투자 도우미 🐵
+🤦🏻‍♀️ : 코인. .그거 내가하면 망하는거 아니야?
 
-## 앱 시연 영상
-https://github.com/sojung/gpt_coin_trading/assets/screenshots/작동영상.MP4
+🤖 : 내가 도와줄게
 
-## 이런 분들을 위한 앱이에요!
+🤷🏻‍♀️ : ???
 
-- 비트코인 투자는 하고 싶은데 어려우신 분
-- 24시간 차트를 보기 힘드신 분
-- AI의 도움을 받아 투자하고 싶으신 분
+## ✨ 앱 실행영상 보기
+https://sojungvideolist.s3.ap-northeast-2.amazonaws.com/%E1%84%8C%E1%85%A1%E1%86%A8%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%89%E1%85%A1%E1%86%BC.MP4
 
-## 주요 기능
+## 🎨 Figma 디자인 보기
+https://www.figma.com/design/MRvd8GMeTDSUScNKORmu4h/%F0%9F%92%98%EA%B3%B5%EC%A3%BC%EC%9D%98-%EC%BD%94%EC%9D%B8?node-id=0-1&p=f&t=PgD5RgE8BVikW56h-0
 
-### 1. 실시간 차트와 투자 현황
+
+## 1. 알아서 투자하고 성실히 보고하는 AI직원
 <p align="center">
 <img src="assets/screenshots/메인화면1.png" width="200">
 </p>
 
-- 비트코인 가격 변화를 실시간으로 확인하세요
-- 투자 상태(매수/매도/홀드)를 한눈에 볼 수 있어요
-- 시간대별 투자 기록을 확인할 수 있어요
 
-### 2. 똑똑한 AI 투자 분석
+
+## 2. 왜 샀지? 왜 팔았지? 
 <p align="center">
 <table align="center">
   <tr>
