@@ -15,12 +15,12 @@
 
 
 
-<p align="center" style="display: flex; justify-content: center; gap: 30px;">
+<p align="center" style="display: flex; justify-content: center; gap: 120px;">
 <a href="https://sojungvideolist.s3.ap-northeast-2.amazonaws.com/%E1%84%8C%E1%85%A1%E1%86%A8%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%89%E1%85%A1%E1%86%BC.MP4">
-<img src="https://img.shields.io/badge/🎥_앱_실행영상_보기-FF4785?style=for-the-badge&logo=flutter&logoColor=white&scale=1.5&labelColor=FF4785&color=white&fontSize=16px" alt="앱 실행영상 보기">
+<img src="https://img.shields.io/badge/🎥_앱_실행영상_보기-FF4785?style=for-the-badge&logo=flutter&logoColor=white&scale=1.5&labelColor=FF4785&color=white&fontSize=40px" alt="앱 실행영상 보기">
 </a>
 <a href="https://www.figma.com/design/MRvd8GMeTDSUScNKORmu4h/%F0%9F%92%98%EA%B3%B5%EC%A3%BC%EC%9D%98-%EC%BD%94%EC%9D%B8?node-id=0-1&p=f&t=PgD5RgE8BVikW56h-0">
-<img src="https://img.shields.io/badge/🎨_Figma_디자인_보기-1E1E1E?style=for-the-badge&logo=figma&logoColor=white&scale=1.5&labelColor=1E1E1E&color=white&fontSize=16px" alt="Figma 디자인 보기">
+<img src="https://img.shields.io/badge/🎨_Figma_디자인_보기-1E1E1E?style=for-the-badge&logo=figma&logoColor=white&scale=1.5&labelColor=1E1E1E&color=white&fontSize=40px" alt="Figma 디자인 보기">
 </a>
 </p>
 
