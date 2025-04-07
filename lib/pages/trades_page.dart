@@ -3,13 +3,16 @@ import '../models/trade.dart';
 import '../widgets/trading_line_graph_widget.dart';
 import '../widgets/trading_records_list_widget.dart';
 import 'package:animated_background/animated_background.dart';
+import '../widgets/upbit_wallet_widget.dart';
 
 class TradesPage extends StatefulWidget {
   final List<Trade> trades;
+  final Map<String, dynamic>? walletData;
 
   const TradesPage({
     super.key,
     required this.trades,
+    this.walletData,
   });
 
   @override
@@ -41,8 +44,17 @@ class _TradesPageState extends State<TradesPage> with TickerProviderStateMixin {
               vsync: this,)
           ),
 
-          // 배경에 그래프 위젯 배치
-          TradingLineGraphWidget(trades: widget.trades),
+          // 배경에 그래프 위젯과 지갑 정보 배치
+          Column(
+            children: [
+              TradingLineGraphWidget(trades: widget.trades),
+              if (widget.walletData != null)
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: UpbitWalletWidget(walletData: widget.walletData!),
+                ),
+            ],
+          ),
 
           // DraggableScrollableSheet로 스크롤 가능한 위젯 구현
           DraggableScrollableSheet(
